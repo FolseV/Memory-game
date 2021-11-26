@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "./MemoryGame.css";
 import angular from "../../img/cards/platforms/angular.svg";
 import aurelia from "../../img/cards/platforms/aurelia.svg";
@@ -13,32 +13,26 @@ import { CardType } from "../../types/Card";
 const uniqueCardsArray = [
   {
     type: "angular",
-    // image: require("../../img/cards/platforms/angular.svg"),
     image: angular,
   },
   {
     type: "aurelia",
-    // image: require("../../img/cards/platforms/aurelia.svg"),
     image: aurelia,
   },
   {
     type: "backbone",
-    // image: require("../../img/cards/platforms/backbone.svg"),
     image: backbone,
   },
   {
     type: "ember",
-    // image: require("../../img/cards/platforms/ember.svg"),
     image: ember,
   },
   {
     type: "jsbadge",
-    // image: require("../../img/cards/platforms/js-badge.svg"),
     image: jsbadge,
   },
   {
     type: "vue",
-    // image: require("../../img/cards/platforms/vue.svg"),
     image: vue,
   },
 ];
@@ -59,9 +53,84 @@ const MemoryGame = () => {
   const [cards, setCards] = useState<CardType[]>(() =>
     shuffleCards(uniqueCardsArray.concat(uniqueCardsArray))
   );
+  const [openCards, setOpenCards] = useState<any[]>([]);
+  const [clearedCards, setClearedCards] = useState<any[]>([]);
+  const [moves, setMoves] = useState(0);
+  const [showModal, setShowModal] = useState(false);
+  const [bestScore, setBestScore] = useState<any>();
+  const [shouldDisableAllCards, setShouldDisableAllCards] = useState(false);
+  const timeout: { current: NodeJS.Timeout | null } = useRef(null);
 
-  const handleCardClick = () => {
-    //smth
+  const disable = () => {
+    setShouldDisableAllCards(true);
+  };
+  const enable = () => {
+    setShouldDisableAllCards(false);
+  };
+
+  const checkCompletion = () => {
+    if (Object.keys(clearedCards).length === uniqueCardsArray.length) {
+      setShowModal(true);
+      const highScore = Math.min(moves, bestScore);
+      setBestScore(highScore);
+      localStorage.setItem("bestScore", highScore + "");
+    }
+  };
+
+  const evaluate = () => {
+    const [first, second] = openCards;
+    if (cards[first].type === cards[second].type) {
+      setClearedCards((prev) => ({ ...prev, [cards[first].type]: true }));
+      setOpenCards([]);
+      return;
+    }
+
+    timeout.current = setTimeout(() => {
+      setOpenCards([]);
+    }, 500);
+  };
+
+  const handleCardClick = (index: number) => {
+    //have max 2
+    if (openCards.length === 1) {
+      setOpenCards((prev) => [...prev, index]);
+      setMoves((moves) => moves + 1);
+    } else {
+      // let timeoutId: null | ReturnType<typeof clearTimeout> = timeout.current;
+      // timeoutId = clearTimeout
+      // window.clearTimeout(timeoutId);
+      setOpenCards([index]);
+    }
+  };
+
+  const handleRestart = () => {
+    setClearedCards([]);
+    setOpenCards([]);
+    setShowModal(false);
+    setMoves(0);
+    setCards(shuffleCards(uniqueCardsArray.concat(uniqueCardsArray)));
+  };
+
+  useEffect(() => {
+    if (openCards.length === 2) {
+      setTimeout(evaluate, 500);
+    }
+  }, [openCards]);
+
+  const checkIsFlipped = (index: number) => {
+    return openCards.includes(index);
+  };
+
+  const checkIsInactive = (card: CardType) => {
+    for (let k in clearedCards) {
+      if (k === card.type) {
+        return true;
+      }
+    }
+    // return clearedCards.includes(card.type);
+    // return Object.values(clearedCards).indexOf(card.type) >= 0;
+    return false;
+    // return Boolean(clearedCards[card.type]);
   };
 
   return (
@@ -72,9 +141,44 @@ const MemoryGame = () => {
       </header>
       <div className="memory-card">
         {cards.map((card, index) => {
-          return <Card key={index} card={card} index={index} onClick={handleCardClick} />;
+          return (
+            <>
+              <Card
+                key={index}
+                card={card}
+                index={index}
+                onClick={handleCardClick}
+                isDisabled={shouldDisableAllCards}
+                isInactive={checkIsInactive(card)}
+                isFlipped={checkIsFlipped(index)}
+              />
+              {/* <button
+                onClick={() => {
+                  console.log(Object.values(clearedCards).indexOf(card.type) >= 0);
+                }}
+              >
+                TEST2
+              </button>
+              <button
+                onClick={() => {
+                  console.log(clearedCards);
+                }}
+              >
+                TEST3
+              </button> */}
+            </>
+          );
         })}
       </div>
+      <div className="score">
+        <span className="moves">{moves}</span>
+      </div>
+      <button className="button" onClick={() => console.log(timeout.current)}>
+        TEST
+      </button>
+      <button className="button" onClick={handleRestart}>
+        Restart
+      </button>
     </div>
   );
 };
