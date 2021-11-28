@@ -43,9 +43,30 @@ const MemoryGame = () => {
 
   // const timeout: { current: NodeJS.Timeout | undefined } = useRef(undefined);
 
+  const [time, setTime] = useState<number>(0);
+  const [intervalId, setIntervalId] = useState<number>(0);
+
+  const handleStartTime = () => {
+    let interval: any = setInterval(() => {
+      setTime((prev) => prev + 10);
+    }, 10);
+
+    setIntervalId(interval);
+  };
+
+  const handleStopTime = () => {
+    clearInterval(intervalId);
+  };
+
+  const handleResetTime = () => {
+    clearInterval(intervalId);
+    setTime(0);
+  };
+
   const checkCompletion = () => {
     if (Object.keys(clearedCards).length === cards.length) {
       setShowModal(true);
+      handleStopTime();
       const highScore = Math.min(moves, bestScore);
       setBestScore(highScore);
       localStorage.setItem("bestScore", highScore + "");
@@ -81,6 +102,8 @@ const MemoryGame = () => {
   };
 
   const handleRestart = () => {
+    handleResetTime();
+    handleStartTime();
     setClearedCards(null);
     setOpenCards(null);
     setShowModal(false);
@@ -118,10 +141,6 @@ const MemoryGame = () => {
 
   return (
     <div className="memory-game">
-      <header>
-        <h1>Play memory game</h1>
-        <p>Rules</p>
-      </header>
       <div className="memory-card">
         {cardss.map((card, index) => {
           return (
@@ -143,11 +162,20 @@ const MemoryGame = () => {
         message="Congrats"
         moves={moves}
         restart={handleRestart}
+        time={time}
       />
       <div className="score">
         <span className="moves">Score: {moves}</span>
       </div>
-      <button className="button" onClick={() => console.log(clearedCards, numberOfCards)}>
+      <div className="timer" style={{ color: "white" }}>
+        <span className="digits" style={{ color: "white" }}>
+          {("0" + Math.floor((time / 1000) % 60)).slice(-2)}.
+        </span>
+        <span className="digits mili-sec" style={{ color: "white" }}>
+          {("0" + ((time / 10) % 100)).slice(-2)}{" "}
+        </span>
+      </div>
+      <button className="button" onClick={() => setShowModal(true)}>
         TEST
       </button>
       <button className="button" onClick={handleRestart}>
