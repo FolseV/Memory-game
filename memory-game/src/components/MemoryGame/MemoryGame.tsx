@@ -9,6 +9,7 @@ import jsbadge from "../../img/cards/platforms/js-badge.svg";
 import vue from "../../img/cards/platforms/vue.svg";
 import Card from "../Card";
 import { CardType } from "../../types/Card";
+import Modal from "../Modal";
 
 const uniqueCardsArray = [
   {
@@ -59,7 +60,7 @@ const MemoryGame = () => {
   const [showModal, setShowModal] = useState(false);
   const [bestScore, setBestScore] = useState<any>();
   const [shouldDisableAllCards, setShouldDisableAllCards] = useState(false);
-  const timeout: { current: NodeJS.Timeout | null } = useRef(null);
+  const timeout: { current: NodeJS.Timeout | undefined } = useRef(undefined);
 
   const disable = () => {
     setShouldDisableAllCards(true);
@@ -79,6 +80,7 @@ const MemoryGame = () => {
 
   const evaluate = () => {
     const [first, second] = openCards;
+    enable();
     if (cards[first].type === cards[second].type) {
       setClearedCards((prev) => ({ ...prev, [cards[first].type]: true }));
       setOpenCards([]);
@@ -95,7 +97,9 @@ const MemoryGame = () => {
     if (openCards.length === 1) {
       setOpenCards((prev) => [...prev, index]);
       setMoves((moves) => moves + 1);
+      disable();
     } else {
+      // clearTimeout(timeout.current);
       // let timeoutId: null | ReturnType<typeof clearTimeout> = timeout.current;
       // timeoutId = clearTimeout
       // window.clearTimeout(timeoutId);
@@ -112,9 +116,17 @@ const MemoryGame = () => {
   };
 
   useEffect(() => {
+    let timeout: any = null;
     if (openCards.length === 2) {
-      setTimeout(evaluate, 500);
+      timeout = setTimeout(evaluate, 500);
     }
+    return () => {
+      clearTimeout(timeout);
+    };
+  }, [openCards]);
+
+  useEffect(() => {
+    checkCompletion();
   }, [openCards]);
 
   const checkIsFlipped = (index: number) => {
@@ -127,8 +139,6 @@ const MemoryGame = () => {
         return true;
       }
     }
-    // return clearedCards.includes(card.type);
-    // return Object.values(clearedCards).indexOf(card.type) >= 0;
     return false;
     // return Boolean(clearedCards[card.type]);
   };
@@ -170,10 +180,17 @@ const MemoryGame = () => {
           );
         })}
       </div>
+      <Modal
+        active={showModal}
+        setActive={setShowModal}
+        message="Congrats"
+        moves={moves}
+        restart={handleRestart}
+      />
       <div className="score">
         <span className="moves">{moves}</span>
       </div>
-      <button className="button" onClick={() => console.log(timeout.current)}>
+      <button className="button" onClick={() => setShowModal(true)}>
         TEST
       </button>
       <button className="button" onClick={handleRestart}>
