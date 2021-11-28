@@ -12,7 +12,6 @@ interface Props {
   isDisabled: boolean;
 }
 
-// const Card = ({ onClick, card, index, isInactive, isFlipped, isDisabled }) => {
 const Card: React.FC<Props> = ({ onClick, card, index, isFlipped, isInactive, isDisabled }) => {
   const handleClick = () => {
     !isFlipped && !isDisabled && onClick(index);
