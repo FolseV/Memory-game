@@ -1,16 +1,12 @@
 import React from "react";
 import { useForm } from "react-hook-form";
-import react from "../../img/cards/platforms/react.svg";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-
-type FormValues = {
-  firstName: string;
-  lastName: string;
-  email: string;
-  suite: string;
-  difficulty: string;
-};
+import react from "../../img/cards/platforms/react.svg";
+import js_prime from "../../img/card suite/primary-javascript.svg";
+import rose from "../../img/card suite/tomas_arad_red_rose.svg";
+import { UserType } from "../../types/user";
+import { useActions } from "../../hooks/useActions";
 
 const schema = yup
   .object({
@@ -23,17 +19,19 @@ const schema = yup
   .required();
 
 const Form = () => {
+  const { getUser } = useActions();
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormValues>({ resolver: yupResolver(schema) });
+  } = useForm<UserType>({ resolver: yupResolver(schema) });
 
   return (
     <>
       <form
         onSubmit={handleSubmit((data) => {
           console.log(data);
+          getUser(data);
         })}
       >
         <div>
@@ -61,11 +59,11 @@ const Form = () => {
         <div>
           <label htmlFor="cards_suite">Which suite?</label>
           <img src={react} alt="" width="100" height="100" />
-          <input type="radio" {...register("suite", { required: true })} value="1" checked />
-          <img src={react} alt="" width="100" height="100" />
-          <input type="radio" {...register("suite", { required: true })} value="2" />
-          <img src={react} alt="" width="100" height="100" />
-          <input type="radio" {...register("suite", { required: true })} value="3" />
+          <input type="radio" {...register("suite", { required: true })} value={react} />
+          <img src={js_prime} alt="" width="100" height="100" />
+          <input type="radio" {...register("suite", { required: true })} value={js_prime} />
+          <img src={rose} alt="" width="100" height="100" />
+          <input type="radio" {...register("suite", { required: true })} value={rose} />
         </div>
 
         <input type="submit" />
