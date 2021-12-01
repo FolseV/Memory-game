@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router";
 import "./Modal.css";
 
 interface Props {
@@ -11,6 +12,8 @@ interface Props {
 }
 
 const Modal: React.FC<Props> = (props) => {
+  const navigate = useNavigate();
+
   // onClick={() => props.setActive(false)}
   return (
     <div className={props.active ? "modal active" : "modal"}>
@@ -26,7 +29,16 @@ const Modal: React.FC<Props> = (props) => {
           </span>
           <span className="digits mili-sec">{("0" + ((props.time / 10) % 100)).slice(-2)} !</span>
         </div>
-        {/* <button className="modal_button">Close</button> */}
+        <button className="modal_button" onClick={() => navigate(`/home`, { replace: true })}>
+          Home
+        </button>
+        <button
+          className="modal_button"
+          onClick={() => navigate(`/leaderBoard`, { replace: true })}
+        >
+          LeaderBoard
+        </button>
+        <p></p>
         <button className="modal_button" onClick={props.restart}>
           Restart
         </button>

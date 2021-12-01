@@ -7,6 +7,7 @@ import js_prime from "../../img/card suite/primary-javascript.svg";
 import rose from "../../img/card suite/tomas_arad_red_rose.svg";
 import { UserType } from "../../types/user";
 import { useActions } from "../../hooks/useActions";
+import { useNavigate } from "react-router";
 
 const schema = yup
   .object({
@@ -19,6 +20,7 @@ const schema = yup
   .required();
 
 const Form = () => {
+  const navigate = useNavigate();
   const { getUser } = useActions();
   const {
     register,
@@ -32,6 +34,7 @@ const Form = () => {
         onSubmit={handleSubmit((data) => {
           console.log(data);
           getUser(data);
+          navigate(`/memorygame`, { replace: true });
         })}
       >
         <div>

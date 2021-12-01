@@ -129,6 +129,10 @@ const MemoryGame = () => {
     checkCompletion();
   }, [clearedCards]);
 
+  useEffect(() => {
+    handleStartTime();
+  }, []);
+
   const checkIsFlipped = (index: number) => {
     return openCards.includes(index);
   };
