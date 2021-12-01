@@ -47,7 +47,8 @@ const MemoryGame = () => {
   const [intervalId, setIntervalId] = useState<number>(0);
 
   const handleStartTime = () => {
-    let interval: any = setInterval(() => {
+    let interval: number = window.setInterval(() => {
+      //window.setInterval
       setTime((prev) => prev + 10);
     }, 10);
 
