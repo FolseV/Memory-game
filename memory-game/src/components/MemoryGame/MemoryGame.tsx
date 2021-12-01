@@ -19,8 +19,9 @@ function shuffleCards(array: CardType[]) {
 }
 
 const MemoryGame = () => {
-  const { numberOfCards, cards, openCards, clearedCards, moves, shouldDisableAllCards } =
-    useTypedSelector((state) => state.cards);
+  const { cards, openCards, clearedCards, moves, shouldDisableAllCards } = useTypedSelector(
+    (state) => state.cards
+  );
   const { setOpenCards, setClearedCards, setMoves, resetMoves, setShouldDisableAllCards } =
     useActions();
 
@@ -37,7 +38,9 @@ const MemoryGame = () => {
   //   );
   // }
 
-  const [cardss, setCards] = useState<CardType[]>(() => shuffleCards(cards.concat(cards)));
+  const [playingCards, setPlayingCards] = useState<CardType[]>(() =>
+    shuffleCards(cards.concat(cards))
+  );
   const [showModal, setShowModal] = useState(false);
   const [bestScore, setBestScore] = useState<any>();
 
@@ -77,8 +80,8 @@ const MemoryGame = () => {
   let timer: ReturnType<typeof setTimeout>;
   const evaluate = () => {
     const [first, second] = openCards;
-    if (cardss[first].type === cardss[second].type) {
-      setClearedCards(cardss[first].type);
+    if (playingCards[first].type === playingCards[second].type) {
+      setClearedCards(playingCards[first].type);
       setShouldDisableAllCards();
 
       setOpenCards(null);
@@ -109,7 +112,7 @@ const MemoryGame = () => {
     setOpenCards(null);
     setShowModal(false);
     resetMoves();
-    setCards(shuffleCards(cards.concat(cards)));
+    setPlayingCards(shuffleCards(cards.concat(cards)));
   };
 
   useEffect(() => {
@@ -143,7 +146,7 @@ const MemoryGame = () => {
   return (
     <div className="memory-game">
       <div className="memory-card">
-        {cardss.map((card, index) => {
+        {playingCards.map((card, index) => {
           return (
             <Card
               key={index}

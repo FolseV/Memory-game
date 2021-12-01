@@ -10,11 +10,11 @@ import { useActions } from "../../hooks/useActions";
 
 const schema = yup
   .object({
-    firstName: yup.string().required(),
-    lastName: yup.string().required(),
-    email: yup.string().email(),
-    suite: yup.string().required(),
-    difficulty: yup.string().required(),
+    firstName: yup.string().required("First name is required!"),
+    lastName: yup.string().required("Last name is required!"),
+    email: yup.string().required("Email is required!").email("Wrong type of email!"),
+    suite: yup.string().required("Choose suite!").nullable(),
+    difficulty: yup.string().required("Choose difficulty!"),
   })
   .required();
 
@@ -46,16 +46,21 @@ const Form = () => {
         <div>
           <label htmlFor="surName">Last name</label>
           <input {...register("lastName", { required: true })} type="text" />
+          <span style={{ color: "red" }}> {errors.lastName?.message}</span>
         </div>
         <div>
           <label htmlFor="email">Email</label>
           <input {...register("email", { required: true })} type="text" />
+          <span style={{ color: "red" }}> {errors.email?.message}</span>
         </div>
         <select {...register("difficulty", { required: true })} id="game_difficulty">
+          <option value="">...</option>
           <option value="easy">easy</option>
           <option value="medium">medium</option>
           <option value="hard">hard</option>
         </select>
+        <span style={{ color: "red" }}> {errors.difficulty?.message}</span>
+
         <div>
           <label htmlFor="cards_suite">Which suite?</label>
           <img src={react} alt="" width="100" height="100" />
@@ -65,6 +70,7 @@ const Form = () => {
           <img src={rose} alt="" width="100" height="100" />
           <input type="radio" {...register("suite", { required: true })} value={rose} />
         </div>
+        <span style={{ color: "red" }}> {errors.suite?.message}</span>
 
         <input type="submit" />
       </form>
