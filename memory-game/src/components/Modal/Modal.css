@@ -58,3 +58,10 @@
   font-size: 16px;
   cursor: pointer;
 }
+
+.digits {
+  color: black;
+}
+.digits .mili-sec {
+  color: black;
+}

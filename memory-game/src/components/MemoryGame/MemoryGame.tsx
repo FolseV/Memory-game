@@ -1,44 +1,12 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./MemoryGame.css";
-import angular from "../../img/cards/platforms/angular.svg";
-import aurelia from "../../img/cards/platforms/aurelia.svg";
-import backbone from "../../img/cards/platforms/backbone.svg";
-import ember from "../../img/cards/platforms/ember.svg";
-import jsbadge from "../../img/cards/platforms/js-badge.svg";
-// import react from "../../img/cards/platforms/react.svg";
-import vue from "../../img/cards/platforms/vue.svg";
 import Card from "../Card";
 import { CardType } from "../../types/Card";
 import Modal from "../Modal";
+import useTypedSelector from "../../hooks";
+import { useActions } from "../../hooks/useActions";
 
-const uniqueCardsArray = [
-  {
-    type: "angular",
-    image: angular,
-  },
-  {
-    type: "aurelia",
-    image: aurelia,
-  },
-  {
-    type: "backbone",
-    image: backbone,
-  },
-  {
-    type: "ember",
-    image: ember,
-  },
-  {
-    type: "jsbadge",
-    image: jsbadge,
-  },
-  {
-    type: "vue",
-    image: vue,
-  },
-];
-
-function shuffleCards(array: any) {
+function shuffleCards(array: CardType[]) {
   const length = array.length;
   for (let i = length; i > 0; i--) {
     const randomIndex = Math.floor(Math.random() * i);
@@ -51,72 +19,104 @@ function shuffleCards(array: any) {
 }
 
 const MemoryGame = () => {
-  const [cards, setCards] = useState<CardType[]>(() =>
-    shuffleCards(uniqueCardsArray.concat(uniqueCardsArray))
+  const { cards, openCards, clearedCards, moves, shouldDisableAllCards } = useTypedSelector(
+    (state) => state.cards
   );
-  const [openCards, setOpenCards] = useState<any[]>([]);
-  const [clearedCards, setClearedCards] = useState<any[]>([]);
-  const [moves, setMoves] = useState(0);
+  const { setOpenCards, setClearedCards, setMoves, resetMoves, setShouldDisableAllCards } =
+    useActions();
+
+  // let shuffledCards: CardType[] = cards;
+  // if (numberOfCards === 12) {
+  //   shuffledCards = shuffleCards(cards.concat(cards));
+  // }
+  // if (numberOfCards === 24) {
+  //   shuffledCards = shuffleCards(cards.concat(cards).concat(cards).concat(cards));
+  // }
+  // if (numberOfCards === 36) {
+  //   shuffledCards = shuffleCards(
+  //     cards.concat(cards).concat(cards).concat(cards).concat(cards).concat(cards)
+  //   );
+  // }
+
+  const [playingCards, setPlayingCards] = useState<CardType[]>(() =>
+    shuffleCards(cards.concat(cards))
+  );
   const [showModal, setShowModal] = useState(false);
   const [bestScore, setBestScore] = useState<any>();
-  const [shouldDisableAllCards, setShouldDisableAllCards] = useState(false);
-  const timeout: { current: NodeJS.Timeout | undefined } = useRef(undefined);
 
-  const disable = () => {
-    setShouldDisableAllCards(true);
+  // const timeout: { current: NodeJS.Timeout | undefined } = useRef(undefined);
+
+  const [time, setTime] = useState<number>(0);
+  const [intervalId, setIntervalId] = useState<number>(0);
+
+  const handleStartTime = () => {
+    let interval: number = window.setInterval(() => {
+      //window.setInterval
+      setTime((prev) => prev + 10);
+    }, 10);
+
+    setIntervalId(interval);
   };
-  const enable = () => {
-    setShouldDisableAllCards(false);
+
+  const handleStopTime = () => {
+    clearInterval(intervalId);
+  };
+
+  const handleResetTime = () => {
+    clearInterval(intervalId);
+    setTime(0);
   };
 
   const checkCompletion = () => {
-    if (Object.keys(clearedCards).length === uniqueCardsArray.length) {
+    if (Object.keys(clearedCards).length === cards.length) {
       setShowModal(true);
+      handleStopTime();
       const highScore = Math.min(moves, bestScore);
       setBestScore(highScore);
       localStorage.setItem("bestScore", highScore + "");
     }
   };
 
+  let timer: ReturnType<typeof setTimeout>;
   const evaluate = () => {
     const [first, second] = openCards;
-    enable();
-    if (cards[first].type === cards[second].type) {
-      setClearedCards((prev) => ({ ...prev, [cards[first].type]: true }));
-      setOpenCards([]);
+    if (playingCards[first].type === playingCards[second].type) {
+      setClearedCards(playingCards[first].type);
+      setShouldDisableAllCards();
+
+      setOpenCards(null);
       return;
     }
-
-    timeout.current = setTimeout(() => {
-      setOpenCards([]);
+    timer = setTimeout(() => {
+      setShouldDisableAllCards();
+      setOpenCards(null);
     }, 500);
   };
 
   const handleCardClick = (index: number) => {
     //have max 2
     if (openCards.length === 1) {
-      setOpenCards((prev) => [...prev, index]);
-      setMoves((moves) => moves + 1);
-      disable();
+      setOpenCards(index);
+      setMoves();
+      setShouldDisableAllCards();
     } else {
-      // clearTimeout(timeout.current);
-      // let timeoutId: null | ReturnType<typeof clearTimeout> = timeout.current;
-      // timeoutId = clearTimeout
-      // window.clearTimeout(timeoutId);
-      setOpenCards([index]);
+      clearTimeout(timer);
+      setOpenCards(index);
     }
   };
 
   const handleRestart = () => {
-    setClearedCards([]);
-    setOpenCards([]);
+    handleResetTime();
+    handleStartTime();
+    setClearedCards(null);
+    setOpenCards(null);
     setShowModal(false);
-    setMoves(0);
-    setCards(shuffleCards(uniqueCardsArray.concat(uniqueCardsArray)));
+    resetMoves();
+    setPlayingCards(shuffleCards(cards.concat(cards)));
   };
 
   useEffect(() => {
-    let timeout: any = null;
+    let timeout: ReturnType<typeof setTimeout>;
     if (openCards.length === 2) {
       timeout = setTimeout(evaluate, 500);
     }
@@ -127,14 +127,14 @@ const MemoryGame = () => {
 
   useEffect(() => {
     checkCompletion();
-  }, [openCards]);
+  }, [clearedCards]);
 
   const checkIsFlipped = (index: number) => {
     return openCards.includes(index);
   };
 
   const checkIsInactive = (card: CardType) => {
-    for (let k in clearedCards) {
+    for (let k of clearedCards) {
       if (k === card.type) {
         return true;
       }
@@ -145,38 +145,18 @@ const MemoryGame = () => {
 
   return (
     <div className="memory-game">
-      <header>
-        <h1>Play memory game</h1>
-        <p>Rules</p>
-      </header>
       <div className="memory-card">
-        {cards.map((card, index) => {
+        {playingCards.map((card, index) => {
           return (
-            <>
-              <Card
-                key={index}
-                card={card}
-                index={index}
-                onClick={handleCardClick}
-                isDisabled={shouldDisableAllCards}
-                isInactive={checkIsInactive(card)}
-                isFlipped={checkIsFlipped(index)}
-              />
-              {/* <button
-                onClick={() => {
-                  console.log(Object.values(clearedCards).indexOf(card.type) >= 0);
-                }}
-              >
-                TEST2
-              </button>
-              <button
-                onClick={() => {
-                  console.log(clearedCards);
-                }}
-              >
-                TEST3
-              </button> */}
-            </>
+            <Card
+              key={index}
+              card={card}
+              index={index}
+              onClick={handleCardClick}
+              isDisabled={shouldDisableAllCards}
+              isInactive={checkIsInactive(card)}
+              isFlipped={checkIsFlipped(index)}
+            />
           );
         })}
       </div>
@@ -186,9 +166,18 @@ const MemoryGame = () => {
         message="Congrats"
         moves={moves}
         restart={handleRestart}
+        time={time}
       />
       <div className="score">
-        <span className="moves">{moves}</span>
+        <span className="moves">Score: {moves}</span>
+      </div>
+      <div className="timer" style={{ color: "white" }}>
+        <span className="digits" style={{ color: "white" }}>
+          {("0" + Math.floor((time / 1000) % 60)).slice(-2)}.
+        </span>
+        <span className="digits mili-sec" style={{ color: "white" }}>
+          {("0" + ((time / 10) % 100)).slice(-2)}{" "}
+        </span>
       </div>
       <button className="button" onClick={() => setShowModal(true)}>
         TEST
