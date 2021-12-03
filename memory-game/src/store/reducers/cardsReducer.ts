@@ -5,52 +5,39 @@ import backbone from "../../img/cards/platforms/backbone.svg";
 import ember from "../../img/cards/platforms/ember.svg";
 import jsbadge from "../../img/cards/platforms/js-badge.svg";
 import vue from "../../img/cards/platforms/vue.svg";
-import react from "../../img/1200px-React-icon.svg.png";
-import { v4 as uuidv4, v4 } from "uuid";
 
 const initialState: CardsState = {
   cards: [
     {
-      id: v4(),
       type: "angular",
       image: angular,
       matched: false,
     },
     {
-      id: v4(),
       type: "aurelia",
       image: aurelia,
       matched: false,
     },
     {
-      id: v4(),
       type: "backbone",
       image: backbone,
       matched: false,
     },
     {
-      id: v4(),
       type: "ember",
       image: ember,
       matched: false,
     },
     {
-      id: v4(),
       type: "jsbadge",
       image: jsbadge,
       matched: false,
     },
     {
-      id: v4(),
       type: "vue",
       image: vue,
       matched: false,
     },
-    // {
-    //   id: 6,
-    //   type: "react",
-    //   image: react,
-    // },
   ],
   openCards: [],
   clearedCards: [],

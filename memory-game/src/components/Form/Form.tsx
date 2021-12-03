@@ -32,9 +32,17 @@ const Form = () => {
     <>
       <form
         onSubmit={handleSubmit((data) => {
-          console.log(data);
           getUser(data);
           navigate(`/memorygame`, { replace: true });
+
+          let items = localStorage.getItem("LeaderBoard");
+          let oldItems = JSON.parse(items ? items : "null") || [];
+
+          let newItem = data;
+
+          oldItems.push(newItem);
+
+          localStorage.setItem("LeaderBoard", JSON.stringify(oldItems));
         })}
       >
         <div>

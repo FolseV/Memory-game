@@ -1,6 +1,5 @@
 import React from "react";
 import classNames from "classnames";
-import react from "../../img/cards/platforms/react.svg";
 import "./Card.css";
 import useTypedSelector from "../../hooks";
 

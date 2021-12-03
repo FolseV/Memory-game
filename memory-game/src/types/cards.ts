@@ -1,7 +1,6 @@
 export interface CardsType {
   type: string;
   image: any;
-  id: string;
   matched: boolean;
 }
 

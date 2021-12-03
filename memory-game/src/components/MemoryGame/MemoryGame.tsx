@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import "./MemoryGame.css";
 import Card from "../Card";
 import { CardType } from "../../types/Card";
@@ -42,7 +42,6 @@ const MemoryGame = () => {
     shuffleCards(cards.concat(cards))
   );
   const [showModal, setShowModal] = useState(false);
-  const [bestScore, setBestScore] = useState<any>();
 
   // const timeout: { current: NodeJS.Timeout | undefined } = useRef(undefined);
 
@@ -58,40 +57,75 @@ const MemoryGame = () => {
     setIntervalId(interval);
   };
 
-  const handleStopTime = () => {
+  // const handleStopTime = () => {
+  //   clearInterval(intervalId);
+  // };
+  const handleStopTime = useCallback(() => {
     clearInterval(intervalId);
-  };
+  }, [intervalId]);
 
   const handleResetTime = () => {
     clearInterval(intervalId);
     setTime(0);
   };
-
-  const checkCompletion = () => {
+  const checkCompletion = useCallback(() => {
     if (Object.keys(clearedCards).length === cards.length) {
       setShowModal(true);
       handleStopTime();
-      const highScore = Math.min(moves, bestScore);
-      setBestScore(highScore);
-      localStorage.setItem("bestScore", highScore + "");
+
+      let leaderBoardStr = localStorage.getItem("LeaderBoard");
+      if (leaderBoardStr) {
+        let leaderBoard = JSON.parse(leaderBoardStr);
+        leaderBoard[leaderBoard.length - 1].time = time;
+        leaderBoard[leaderBoard.length - 1].moves = moves;
+        localStorage.setItem("LeaderBoard", JSON.stringify(leaderBoard));
+      }
     }
-  };
+  }, [cards.length, clearedCards, handleStopTime, moves, time]);
+
+  // const checkCompletion = () => {
+  //   if (Object.keys(clearedCards).length === cards.length) {
+  //     setShowModal(true);
+  //     handleStopTime();
+  //     const highScore = Math.min(moves, bestScore);
+  //     setBestScore(highScore);
+  //     localStorage.setItem("bestScore", highScore + "");
+  //   }
+  // };
 
   let timer: ReturnType<typeof setTimeout>;
-  const evaluate = () => {
-    const [first, second] = openCards;
-    if (playingCards[first].type === playingCards[second].type) {
-      setClearedCards(playingCards[first].type);
-      setShouldDisableAllCards();
+  // const evaluate = () => {
+  //   const [first, second] = openCards;
+  //   if (playingCards[first].type === playingCards[second].type) {
+  //     setClearedCards(playingCards[first].type);
+  //     setShouldDisableAllCards();
 
-      setOpenCards(null);
-      return;
-    }
-    timer = setTimeout(() => {
-      setShouldDisableAllCards();
-      setOpenCards(null);
-    }, 500);
-  };
+  //     setOpenCards(null);
+  //     return;
+  //   }
+  //   timer = setTimeout(() => {
+  //     setShouldDisableAllCards();
+  //     setOpenCards(null);
+  //   }, 500);
+  // };
+
+  const evaluate = useCallback(
+    (timer) => {
+      const [first, second] = openCards;
+      if (playingCards[first].type === playingCards[second].type) {
+        setClearedCards(playingCards[first].type);
+        setShouldDisableAllCards();
+
+        setOpenCards(null);
+        return;
+      }
+      timer = setTimeout(() => {
+        setShouldDisableAllCards();
+        setOpenCards(null);
+      }, 500);
+    },
+    [openCards, playingCards, setClearedCards, setOpenCards, setShouldDisableAllCards]
+  );
 
   const handleCardClick = (index: number) => {
     //have max 2
@@ -123,11 +157,11 @@ const MemoryGame = () => {
     return () => {
       clearTimeout(timeout);
     };
-  }, [openCards]);
+  }, [openCards, evaluate]);
 
   useEffect(() => {
     checkCompletion();
-  }, [clearedCards]);
+  }, [clearedCards, checkCompletion]);
 
   useEffect(() => {
     handleStartTime();
@@ -183,7 +217,13 @@ const MemoryGame = () => {
           {("0" + ((time / 10) % 100)).slice(-2)}{" "}
         </span>
       </div>
-      <button className="button" onClick={() => setShowModal(true)}>
+      <button
+        className="button"
+        onClick={() => {
+          setShowModal(true);
+          handleStopTime();
+        }}
+      >
         TEST
       </button>
       <button className="button" onClick={handleRestart}>

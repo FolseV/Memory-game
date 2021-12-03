@@ -1,18 +1,12 @@
-import React from "react";
 import "./App.css";
 import Form from "./components/Form";
 import MemoryGame from "./components/MemoryGame";
-import useTypedSelector from "./hooks";
-import { useActions } from "./hooks/useActions";
-import react from "./img/cards/platforms/react.svg";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { NavLink } from "react-router-dom";
 import { Navigate } from "react-router-dom";
 import Greeting from "./components/Greeting";
 
 function App() {
-  const { cards } = useTypedSelector((state) => state.cards);
-  const { SetDifEasy, SetDifHard, SetDifMedium } = useActions();
   return (
     <BrowserRouter>
       <div className="App">
