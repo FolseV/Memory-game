@@ -34,7 +34,7 @@ const Modal: React.FC<Props> = (props) => {
         </button>
         <button
           className="modal_button"
-          onClick={() => navigate(`/leaderBoard`, { replace: true })}
+          onClick={() => navigate(`/leaderboard`, { replace: true })}
         >
           LeaderBoard
         </button>
