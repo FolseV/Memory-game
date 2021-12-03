@@ -2,6 +2,8 @@ import { Middleware } from "redux";
 
 export const resultsTable: Middleware = (store) => (next) => (action) => {
   const returnVal = next(action);
-  localStorage.setItem("results", JSON.stringify(store.getState()));
+  let counter = 0;
+  localStorage.setItem(counter++ + "", JSON.stringify(store.getState()));
+  console.log(store.getState());
   return returnVal;
 };

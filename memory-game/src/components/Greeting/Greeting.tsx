@@ -29,6 +29,9 @@ const Greeting = () => {
           holidays!
         </p>
       </div>
+      <div>
+        <a href="https://en.wikipedia.org/wiki/Concentration_(card_game)">About</a>
+      </div>
       <button onClick={() => navigate(`/home`, { replace: true })}>Next</button>
     </div>
   );

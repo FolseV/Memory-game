@@ -1,11 +1,12 @@
 import { UserAction, UserActionTypes, UserState } from "../../types/user";
+import react from "../../img/cards/platforms/react.svg";
 
 const initialState: UserState = {
   user: {
     firstName: "string",
     lastName: "string",
     email: "string",
-    suite: "string",
+    suite: react,
     difficulty: "string",
   },
 };
