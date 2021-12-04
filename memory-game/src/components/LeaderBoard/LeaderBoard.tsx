@@ -1,4 +1,8 @@
+import { useNavigate } from "react-router";
+
 const LeaderBoard = () => {
+  const navigate = useNavigate();
+
   const leaderBoardStr = localStorage.getItem("LeaderBoard");
   if (leaderBoardStr) {
     const leaderBoard = JSON.parse(leaderBoardStr);
@@ -14,6 +18,8 @@ const LeaderBoard = () => {
     return (
       <div>
         <h1>Leaderboard TOP10</h1>
+        <button onClick={() => navigate(`/memorygame`, { replace: true })}>Play again</button>
+        <button onClick={() => navigate(`/greetings`, { replace: true })}>Rules</button>
         <ul>
           {sortedLeaderBoardByTime.map((user: any) => {
             return (

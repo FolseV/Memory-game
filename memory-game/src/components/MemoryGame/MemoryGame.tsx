@@ -25,19 +25,6 @@ const MemoryGame = () => {
   const { setOpenCards, setClearedCards, setMoves, resetMoves, setShouldDisableAllCards } =
     useActions();
 
-  // let shuffledCards: CardType[] = cards;
-  // if (numberOfCards === 12) {
-  //   shuffledCards = shuffleCards(cards.concat(cards));
-  // }
-  // if (numberOfCards === 24) {
-  //   shuffledCards = shuffleCards(cards.concat(cards).concat(cards).concat(cards));
-  // }
-  // if (numberOfCards === 36) {
-  //   shuffledCards = shuffleCards(
-  //     cards.concat(cards).concat(cards).concat(cards).concat(cards).concat(cards)
-  //   );
-  // }
-
   const [playingCards, setPlayingCards] = useState<CardType[]>(() =>
     shuffleCards(cards.concat(cards))
   );

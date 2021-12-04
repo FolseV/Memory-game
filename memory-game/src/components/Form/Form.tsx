@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
@@ -21,30 +21,47 @@ const schema = yup
 
 const Form = () => {
   const navigate = useNavigate();
-  const { getUser } = useActions();
+  const { getUser, SetDifEasy, SetDifMedium, SetDifHard } = useActions();
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<UserType>({ resolver: yupResolver(schema) });
 
+  const onSubmit = useCallback(
+    (data) => {
+      getUser(data);
+      navigate(`/memorygame`, { replace: true });
+
+      let items = localStorage.getItem("LeaderBoard");
+      let oldItems = JSON.parse(items ? items : "null") || [];
+
+      let newItem = data;
+
+      oldItems.push(newItem);
+
+      localStorage.setItem("LeaderBoard", JSON.stringify(oldItems));
+    },
+    [getUser, navigate]
+  );
+
+  const handleSelect = useCallback(
+    (e) => {
+      if (e.target.value === "easy") {
+        SetDifEasy();
+      }
+      if (e.target.value === "medium") {
+        SetDifMedium();
+      }
+      if (e.target.value === "hard") {
+        SetDifHard();
+      }
+    },
+    [SetDifEasy, SetDifMedium, SetDifHard]
+  );
   return (
     <>
-      <form
-        onSubmit={handleSubmit((data) => {
-          getUser(data);
-          navigate(`/memorygame`, { replace: true });
-
-          let items = localStorage.getItem("LeaderBoard");
-          let oldItems = JSON.parse(items ? items : "null") || [];
-
-          let newItem = data;
-
-          oldItems.push(newItem);
-
-          localStorage.setItem("LeaderBoard", JSON.stringify(oldItems));
-        })}
-      >
+      <form onSubmit={handleSubmit(onSubmit)}>
         <div>
           <label htmlFor="firstName">First Name</label>
           <input
@@ -64,11 +81,14 @@ const Form = () => {
           <input {...register("email", { required: true })} type="text" />
           <span style={{ color: "red" }}> {errors.email?.message}</span>
         </div>
-        <select {...register("difficulty", { required: true })} id="game_difficulty">
+        <select
+          {...register("difficulty", { required: true })}
+          id="game_difficulty"
+          defaultValue="easy"
+          onChange={handleSelect}
+        >
           <option value="">...</option>
-          <option value="easy" selected>
-            easy
-          </option>
+          <option value="easy">easy</option>
           <option value="medium">medium</option>
           <option value="hard">hard</option>
         </select>
