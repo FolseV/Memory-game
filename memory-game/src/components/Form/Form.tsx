@@ -66,7 +66,9 @@ const Form = () => {
         </div>
         <select {...register("difficulty", { required: true })} id="game_difficulty">
           <option value="">...</option>
-          <option value="easy">easy</option>
+          <option value="easy" selected>
+            easy
+          </option>
           <option value="medium">medium</option>
           <option value="hard">hard</option>
         </select>
@@ -75,7 +77,7 @@ const Form = () => {
         <div>
           <label htmlFor="cards_suite">Which suite?</label>
           <img src={react} alt="" width="100" height="100" />
-          <input type="radio" {...register("suite", { required: true })} value={react} />
+          <input type="radio" {...register("suite", { required: true })} value={react} checked />
           <img src={js_prime} alt="" width="100" height="100" />
           <input type="radio" {...register("suite", { required: true })} value={js_prime} />
           <img src={rose} alt="" width="100" height="100" />
