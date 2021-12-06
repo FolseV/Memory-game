@@ -9,7 +9,7 @@ const initialState: UserState = {
     lastName: "string",
     email: "string",
     suite: react,
-    difficulty: "string",
+    difficulty: "easy",
   },
 };
 

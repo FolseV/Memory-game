@@ -20,6 +20,15 @@ function App() {
             </li>
             <li>
               <NavLink
+                to="/greetings"
+                end
+                className={({ isActive }) => (isActive ? "true" : "false")}
+              >
+                Rules
+              </NavLink>
+            </li>
+            <li>
+              <NavLink
                 to="/leaderboard"
                 end
                 className={({ isActive }) => (isActive ? "true" : "false")}

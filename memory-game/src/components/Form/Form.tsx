@@ -20,6 +20,7 @@ const schema = yup
   .required();
 
 const Form = () => {
+  console.log("render form");
   const navigate = useNavigate();
   const { getUser, SetDifEasy, SetDifMedium, SetDifHard } = useActions();
   const {

@@ -12,6 +12,7 @@ interface Props {
 }
 
 const Modal: React.FC<Props> = (props) => {
+  console.log("rednder modal");
   const navigate = useNavigate();
 
   // onClick={() => props.setActive(false)}
@@ -25,8 +26,9 @@ const Modal: React.FC<Props> = (props) => {
         <div className="modal__body">
           <p>You WON! with {props.moves} moves.</p>
           <span className="digits">
-            Your time {("0" + Math.floor((props.time / 1000) % 60)).slice(-2)}.
+            Your time {("0" + Math.floor((props.time / 60000) % 60)).slice(-2)}:
           </span>
+          <span className="digits">{("0" + Math.floor((props.time / 1000) % 60)).slice(-2)}.</span>
           <span className="digits mili-sec">{("0" + ((props.time / 10) % 100)).slice(-2)} !</span>
         </div>
         <button className="modal_button" onClick={() => navigate(`/home`, { replace: true })}>
@@ -47,4 +49,4 @@ const Modal: React.FC<Props> = (props) => {
   );
 };
 
-export default Modal;
+export default React.memo(Modal);

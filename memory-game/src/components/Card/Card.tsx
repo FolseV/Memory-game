@@ -2,10 +2,11 @@ import React from "react";
 import classNames from "classnames";
 import "./Card.css";
 import useTypedSelector from "../../hooks";
+import { CardsType } from "../../types/cards";
 
 interface Props {
   onClick: any;
-  card: any; // type Card
+  card: CardsType;
   index: number;
   isInactive: boolean;
   isFlipped: boolean;
@@ -14,7 +15,7 @@ interface Props {
 
 const Card: React.FC<Props> = ({ onClick, card, index, isFlipped, isInactive, isDisabled }) => {
   const { user } = useTypedSelector((state) => state.user);
-
+  console.log("render card");
   const handleClick = () => {
     !isFlipped && !isDisabled && onClick(index);
   };
@@ -37,4 +38,4 @@ const Card: React.FC<Props> = ({ onClick, card, index, isFlipped, isInactive, is
   );
 };
 
-export default Card;
+export default React.memo(Card);
