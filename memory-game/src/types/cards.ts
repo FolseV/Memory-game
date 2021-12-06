@@ -1,7 +1,6 @@
 export interface CardsType {
   type: string;
   image: any;
-  matched: boolean;
 }
 
 export enum CardsActionTypes {
@@ -55,13 +54,10 @@ interface SetDifficultyHardAction {
   type: CardsActionTypes.SET_DIFFICULTY_HARD;
 }
 export interface CardsState {
-  //   id: string;
   cards: CardsType[];
   openCards: number[];
   clearedCards: string[];
   moves: number;
-  bestScore: number;
-  numberOfCards: number;
   shouldDisableAllCards: boolean;
 }
 

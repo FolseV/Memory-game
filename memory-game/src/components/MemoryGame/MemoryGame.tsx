@@ -1,12 +1,16 @@
 import React, { useCallback, useEffect, useState } from "react";
-import "./MemoryGame.css";
+import styles from "./MemoryGame.module.css";
 import Card from "../Card";
-import { CardType } from "../../types/Card";
 import Modal from "../Modal";
 import useTypedSelector from "../../hooks";
 import { useActions } from "../../hooks/useActions";
+import classNames from "classnames/bind";
+import { CardsType } from "../../types/cards";
+import Timer from "../Timer";
 
-function shuffleCards(array: CardType[]) {
+let cx = classNames.bind(styles);
+
+function shuffleCards(array: CardsType[]) {
   const length = array.length;
   for (let i = length; i > 0; i--) {
     const randomIndex = Math.floor(Math.random() * i);
@@ -19,69 +23,89 @@ function shuffleCards(array: CardType[]) {
 }
 
 const MemoryGame = () => {
+  console.log("render game");
   const { cards, openCards, clearedCards, moves, shouldDisableAllCards } = useTypedSelector(
     (state) => state.cards
   );
-  const { setOpenCards, setClearedCards, setMoves, resetMoves, setShouldDisableAllCards } =
-    useActions();
+  const { user } = useTypedSelector((state) => state.user);
+  const { time } = useTypedSelector((state) => state.timer);
+  const {
+    setOpenCards,
+    setClearedCards,
+    setMoves,
+    resetMoves,
+    setShouldDisableAllCards,
+    startTimer,
+    resetTimer,
+    stopTimer,
+  } = useActions();
 
-  // let shuffledCards: CardType[] = cards;
-  // if (numberOfCards === 12) {
-  //   shuffledCards = shuffleCards(cards.concat(cards));
-  // }
-  // if (numberOfCards === 24) {
-  //   shuffledCards = shuffleCards(cards.concat(cards).concat(cards).concat(cards));
-  // }
-  // if (numberOfCards === 36) {
-  //   shuffledCards = shuffleCards(
-  //     cards.concat(cards).concat(cards).concat(cards).concat(cards).concat(cards)
-  //   );
-  // }
-
-  const [playingCards, setPlayingCards] = useState<CardType[]>(() =>
+  const [playingCards, setPlayingCards] = useState<CardsType[]>(() =>
     shuffleCards(cards.concat(cards))
   );
   const [showModal, setShowModal] = useState(false);
 
   // const timeout: { current: NodeJS.Timeout | undefined } = useRef(undefined);
 
-  const [time, setTime] = useState<number>(0);
-  const [intervalId, setIntervalId] = useState<number>(0);
+  // const [time, setTime] = useState<number>(0);
+  // const [intervalId, setIntervalId] = useState<number>(0);
 
-  const handleStartTime = () => {
-    let interval: number = window.setInterval(() => {
-      //window.setInterval
-      setTime((prev) => prev + 10);
-    }, 10);
+  // const handleStartTime = () => {
+  //   let interval: number = window.setInterval(() => {
+  //     //window.setInterval
+  //     setTime((prev) => prev + 10);
+  //   }, 10);
 
-    setIntervalId(interval);
-  };
+  //   setIntervalId(interval);
+  // };
+
+  // const handleStartTime = useCallback(() => {
+  //   let interval: number = window.setInterval(() => {
+  //     //window.setInterval
+  //     setTime((prev) => prev + 10);
+  //   }, 10);
+  //   console.log(interval);
+  //   setIntervalId(interval);
+  // }, [setTime]);
 
   // const handleStopTime = () => {
   //   clearInterval(intervalId);
   // };
-  const handleStopTime = useCallback(() => {
-    clearInterval(intervalId);
-  }, [intervalId]);
+  // const handleStopTime = useCallback(() => {
+  //   clearInterval(intervalId);
+  // }, [intervalId]);
 
-  const handleResetTime = () => {
-    clearInterval(intervalId);
-    setTime(0);
-  };
+  // const handleResetTime = () => {
+  //   clearInterval(intervalId);
+  //   setTime(0);
+  // };
+
+  // const handleResetTime = useCallback(() => {
+  //   clearInterval(intervalId);
+  //   setTime(0);
+  // }, [intervalId]);
+
   const checkCompletion = useCallback(() => {
     if (Object.keys(clearedCards).length === cards.length) {
       setShowModal(true);
-      handleStopTime();
+      // handleStopTime();
+      stopTimer();
 
       let leaderBoardStr = localStorage.getItem("LeaderBoard");
       if (leaderBoardStr) {
         let leaderBoard = JSON.parse(leaderBoardStr);
+        // if (time) {
         leaderBoard[leaderBoard.length - 1].time = time;
         leaderBoard[leaderBoard.length - 1].moves = moves;
         localStorage.setItem("LeaderBoard", JSON.stringify(leaderBoard));
+        // } else {
+        // leaderBoard.slice(0, leaderBoard.length - 1);
+
+        // localStorage.setItem("LeaderBoard", JSON.stringify(leaderBoard));
+        // }
       }
     }
-  }, [cards.length, clearedCards, handleStopTime, moves, time]);
+  }, [cards.length, clearedCards, stopTimer, moves, time]);
 
   // const checkCompletion = () => {
   //   if (Object.keys(clearedCards).length === cards.length) {
@@ -140,8 +164,10 @@ const MemoryGame = () => {
   };
 
   const handleRestart = () => {
-    handleResetTime();
-    handleStartTime();
+    // handleResetTime();
+    resetTimer();
+    // handleStartTime();
+    startTimer();
     setClearedCards(null);
     setOpenCards(null);
     setShowModal(false);
@@ -164,14 +190,15 @@ const MemoryGame = () => {
   }, [clearedCards, checkCompletion]);
 
   useEffect(() => {
-    handleStartTime();
-  }, []);
+    // handleStartTime();
+    startTimer();
+  }, [startTimer]);
 
   const checkIsFlipped = (index: number) => {
     return openCards.includes(index);
   };
 
-  const checkIsInactive = (card: CardType) => {
+  const checkIsInactive = (card: CardsType) => {
     for (let k of clearedCards) {
       if (k === card.type) {
         return true;
@@ -182,8 +209,25 @@ const MemoryGame = () => {
   };
 
   return (
-    <div className="memory-game">
-      <div className="memory-card">
+    // <div className="memory-game">
+    // <div className={styles.memoryGame}>
+    <div
+      className={cx(
+        {
+          memoryGame: true,
+        },
+        { [`dif-${user.difficulty}`]: true }
+      )}
+    >
+      {/* <div className="memory-card"> */}
+      <div
+        className={cx(
+          {
+            memoryCard: true,
+          },
+          { [`dif-${user.difficulty ? user.difficulty : "easy"}`]: true }
+        )}
+      >
         {playingCards.map((card, index) => {
           return (
             <Card
@@ -198,39 +242,36 @@ const MemoryGame = () => {
           );
         })}
       </div>
-      <Modal
-        active={showModal}
-        setActive={setShowModal}
-        message="Congrats"
-        moves={moves}
-        restart={handleRestart}
-        time={time}
-      />
-      <div className="score">
-        <span className="moves">Score: {moves}</span>
+      {showModal ? (
+        <Modal
+          active={showModal}
+          setActive={setShowModal}
+          message="Congrats"
+          moves={moves}
+          restart={handleRestart}
+          time={time}
+        />
+      ) : undefined}
+
+      <div className={styles.score}>
+        <span className={styles.moves}>Score: {moves}</span>
       </div>
-      <div className="timer" style={{ color: "white" }}>
-        <span className="digits" style={{ color: "white" }}>
-          {("0" + Math.floor((time / 1000) % 60)).slice(-2)}.
-        </span>
-        <span className="digits mili-sec" style={{ color: "white" }}>
-          {("0" + ((time / 10) % 100)).slice(-2)}{" "}
-        </span>
-      </div>
+      <Timer />
       <button
-        className="button"
+        className={styles.button}
         onClick={() => {
           setShowModal(true);
-          handleStopTime();
+          stopTimer();
+          // handleStopTime();
         }}
       >
         TEST
       </button>
-      <button className="button" onClick={handleRestart}>
+      <button className={styles.button} onClick={handleRestart}>
         Restart
       </button>
     </div>
   );
 };
 
-export default MemoryGame;
+export default React.memo(MemoryGame);

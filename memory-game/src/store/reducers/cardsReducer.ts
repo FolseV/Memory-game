@@ -1,49 +1,27 @@
 import { CardsState, CardsAction, CardsActionTypes } from "../../types/cards";
-import angular from "../../img/cards/platforms/angular.svg";
-import aurelia from "../../img/cards/platforms/aurelia.svg";
-import backbone from "../../img/cards/platforms/backbone.svg";
-import ember from "../../img/cards/platforms/ember.svg";
-import jsbadge from "../../img/cards/platforms/js-badge.svg";
-import vue from "../../img/cards/platforms/vue.svg";
+import { easy, hard, medium } from "../../data/data";
 
+// const CheckLocalStorageValues = (): CardsState => {
+//   const checkLocalStorageStr = localStorage.getItem("LeaderBoard");
+//   const [state, setState] = useState("");
+//   if (checkLocalStorageStr) {
+//     const checkLocalStorage = JSON.parse(checkLocalStorageStr);
+//     var difficulty: string = checkLocalStorage[checkLocalStorage.length - 1].difficulty;
+//     setState(difficulty);
+//   }
+//   const difficultys: any = {
+//     easy: easy,
+//     medium: medium,
+//     hard: hard,
+//   };
+
+//   return initialState;
+// };
 const initialState: CardsState = {
-  cards: [
-    {
-      type: "angular",
-      image: angular,
-      matched: false,
-    },
-    {
-      type: "aurelia",
-      image: aurelia,
-      matched: false,
-    },
-    {
-      type: "backbone",
-      image: backbone,
-      matched: false,
-    },
-    {
-      type: "ember",
-      image: ember,
-      matched: false,
-    },
-    {
-      type: "jsbadge",
-      image: jsbadge,
-      matched: false,
-    },
-    {
-      type: "vue",
-      image: vue,
-      matched: false,
-    },
-  ],
+  cards: easy,
   openCards: [],
   clearedCards: [],
   moves: 0,
-  bestScore: 0,
-  numberOfCards: 12,
   shouldDisableAllCards: false,
 };
 
@@ -70,16 +48,16 @@ export const cardsReducer = (state = initialState, action: CardsAction): CardsSt
       return { ...state, shouldDisableAllCards: state.shouldDisableAllCards ? false : true };
 
     case CardsActionTypes.SET_DIFFICULTY_EASY:
-      return { ...state, numberOfCards: 12 };
+      return { ...state, cards: easy };
     case CardsActionTypes.SET_DIFFICULTY_MEDIUM:
       return {
         ...state,
-        numberOfCards: 24,
+        cards: medium,
       };
     case CardsActionTypes.SET_DIFFICULTY_HARD:
       return {
         ...state,
-        numberOfCards: 36,
+        cards: hard,
       };
     default:
       return state;

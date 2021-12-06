@@ -2,6 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router";
 
 const Greeting = () => {
+  console.log("render greeting");
   const navigate = useNavigate();
   return (
     <div>

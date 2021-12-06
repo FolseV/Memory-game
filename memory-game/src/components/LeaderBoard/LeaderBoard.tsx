@@ -1,8 +1,42 @@
-const LeaderBoard = () => {
+import { useEffect } from "react";
+import { useNavigate } from "react-router";
+import { sortedLeaderBoardType } from "../../types/types";
+
+const removeNaNLeaderBoard = () => {
   const leaderBoardStr = localStorage.getItem("LeaderBoard");
   if (leaderBoardStr) {
     const leaderBoard = JSON.parse(leaderBoardStr);
-    let sortedLeaderBoardByTime = leaderBoard.sort((a: any, b: any) => (a.time > b.time ? 1 : -1));
+    let filteredLeaderBoard: sortedLeaderBoardType[] = leaderBoard.filter(
+      (user: sortedLeaderBoardType) => {
+        return user.time !== undefined && user.time !== 0;
+      }
+    );
+    console.log(filteredLeaderBoard);
+    localStorage.setItem("LeaderBoard", JSON.stringify(filteredLeaderBoard));
+  }
+};
+
+const LeaderBoard = () => {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    removeNaNLeaderBoard();
+  }, []);
+
+  const leaderBoardStr = localStorage.getItem("LeaderBoard");
+  if (leaderBoardStr) {
+    console.log("render leaderboard");
+    const leaderBoard = JSON.parse(leaderBoardStr);
+    //filter if time not asigned
+    let filteredLeaderBoard: sortedLeaderBoardType[] = leaderBoard.filter(
+      (user: sortedLeaderBoardType) => {
+        return user.time !== undefined;
+      }
+    );
+
+    let sortedLeaderBoardByTime: sortedLeaderBoardType[] = filteredLeaderBoard.sort(
+      (a: sortedLeaderBoardType, b: sortedLeaderBoardType) => (a.time > b.time ? 1 : -1)
+    );
 
     //remove more than 10 values
     if (sortedLeaderBoardByTime.length >= 10) {
@@ -14,6 +48,8 @@ const LeaderBoard = () => {
     return (
       <div>
         <h1>Leaderboard TOP10</h1>
+        <button onClick={() => navigate(`/memorygame`, { replace: true })}>Play again</button>
+        <button onClick={() => navigate(`/greetings`, { replace: true })}>Rules</button>
         <ul>
           {sortedLeaderBoardByTime.map((user: any) => {
             return (
