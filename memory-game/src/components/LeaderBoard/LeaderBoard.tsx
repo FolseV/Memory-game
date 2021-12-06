@@ -1,8 +1,27 @@
+import { useEffect } from "react";
 import { useNavigate } from "react-router";
 import { sortedLeaderBoardType } from "../../types/types";
 
+const removeNaNLeaderBoard = () => {
+  const leaderBoardStr = localStorage.getItem("LeaderBoard");
+  if (leaderBoardStr) {
+    const leaderBoard = JSON.parse(leaderBoardStr);
+    let filteredLeaderBoard: sortedLeaderBoardType[] = leaderBoard.filter(
+      (user: sortedLeaderBoardType) => {
+        return user.time !== undefined && user.time !== 0;
+      }
+    );
+    console.log(filteredLeaderBoard);
+    localStorage.setItem("LeaderBoard", JSON.stringify(filteredLeaderBoard));
+  }
+};
+
 const LeaderBoard = () => {
   const navigate = useNavigate();
+
+  useEffect(() => {
+    removeNaNLeaderBoard();
+  }, []);
 
   const leaderBoardStr = localStorage.getItem("LeaderBoard");
   if (leaderBoardStr) {

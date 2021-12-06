@@ -6,6 +6,7 @@ import useTypedSelector from "../../hooks";
 import { useActions } from "../../hooks/useActions";
 import classNames from "classnames/bind";
 import { CardsType } from "../../types/cards";
+import Timer from "../Timer";
 
 let cx = classNames.bind(styles);
 
@@ -27,8 +28,17 @@ const MemoryGame = () => {
     (state) => state.cards
   );
   const { user } = useTypedSelector((state) => state.user);
-  const { setOpenCards, setClearedCards, setMoves, resetMoves, setShouldDisableAllCards } =
-    useActions();
+  const { time } = useTypedSelector((state) => state.timer);
+  const {
+    setOpenCards,
+    setClearedCards,
+    setMoves,
+    resetMoves,
+    setShouldDisableAllCards,
+    startTimer,
+    resetTimer,
+    stopTimer,
+  } = useActions();
 
   const [playingCards, setPlayingCards] = useState<CardsType[]>(() =>
     shuffleCards(cards.concat(cards))
@@ -37,33 +47,49 @@ const MemoryGame = () => {
 
   // const timeout: { current: NodeJS.Timeout | undefined } = useRef(undefined);
 
-  const [time, setTime] = useState<number>(0);
-  const [intervalId, setIntervalId] = useState<number>(0);
+  // const [time, setTime] = useState<number>(0);
+  // const [intervalId, setIntervalId] = useState<number>(0);
 
-  const handleStartTime = () => {
-    let interval: number = window.setInterval(() => {
-      //window.setInterval
-      setTime((prev) => prev + 10);
-    }, 10);
+  // const handleStartTime = () => {
+  //   let interval: number = window.setInterval(() => {
+  //     //window.setInterval
+  //     setTime((prev) => prev + 10);
+  //   }, 10);
 
-    setIntervalId(interval);
-  };
+  //   setIntervalId(interval);
+  // };
+
+  // const handleStartTime = useCallback(() => {
+  //   let interval: number = window.setInterval(() => {
+  //     //window.setInterval
+  //     setTime((prev) => prev + 10);
+  //   }, 10);
+  //   console.log(interval);
+  //   setIntervalId(interval);
+  // }, [setTime]);
 
   // const handleStopTime = () => {
   //   clearInterval(intervalId);
   // };
-  const handleStopTime = useCallback(() => {
-    clearInterval(intervalId);
-  }, [intervalId]);
+  // const handleStopTime = useCallback(() => {
+  //   clearInterval(intervalId);
+  // }, [intervalId]);
 
-  const handleResetTime = () => {
-    clearInterval(intervalId);
-    setTime(0);
-  };
+  // const handleResetTime = () => {
+  //   clearInterval(intervalId);
+  //   setTime(0);
+  // };
+
+  // const handleResetTime = useCallback(() => {
+  //   clearInterval(intervalId);
+  //   setTime(0);
+  // }, [intervalId]);
+
   const checkCompletion = useCallback(() => {
     if (Object.keys(clearedCards).length === cards.length) {
       setShowModal(true);
-      handleStopTime();
+      // handleStopTime();
+      stopTimer();
 
       let leaderBoardStr = localStorage.getItem("LeaderBoard");
       if (leaderBoardStr) {
@@ -79,7 +105,7 @@ const MemoryGame = () => {
         // }
       }
     }
-  }, [cards.length, clearedCards, handleStopTime, moves, time]);
+  }, [cards.length, clearedCards, stopTimer, moves, time]);
 
   // const checkCompletion = () => {
   //   if (Object.keys(clearedCards).length === cards.length) {
@@ -138,8 +164,10 @@ const MemoryGame = () => {
   };
 
   const handleRestart = () => {
-    handleResetTime();
-    handleStartTime();
+    // handleResetTime();
+    resetTimer();
+    // handleStartTime();
+    startTimer();
     setClearedCards(null);
     setOpenCards(null);
     setShowModal(false);
@@ -162,8 +190,9 @@ const MemoryGame = () => {
   }, [clearedCards, checkCompletion]);
 
   useEffect(() => {
-    handleStartTime();
-  }, []);
+    // handleStartTime();
+    startTimer();
+  }, [startTimer]);
 
   const checkIsFlipped = (index: number) => {
     return openCards.includes(index);
@@ -227,20 +256,13 @@ const MemoryGame = () => {
       <div className={styles.score}>
         <span className={styles.moves}>Score: {moves}</span>
       </div>
-      <div className={styles.timer} style={{ color: "white" }}>
-        <span className={styles.digits}>{("0" + Math.floor((time / 60000) % 60)).slice(-2)}:</span>
-        <span className={styles.digits} style={{ color: "white" }}>
-          {("0" + Math.floor((time / 1000) % 60)).slice(-2)}.
-        </span>
-        <span className={styles.digitsMiliSec} style={{ color: "white" }}>
-          {("0" + ((time / 10) % 100)).slice(-2)}{" "}
-        </span>
-      </div>
+      <Timer />
       <button
         className={styles.button}
         onClick={() => {
           setShowModal(true);
-          handleStopTime();
+          stopTimer();
+          // handleStopTime();
         }}
       >
         TEST
@@ -252,4 +274,4 @@ const MemoryGame = () => {
   );
 };
 
-export default MemoryGame;
+export default React.memo(MemoryGame);
