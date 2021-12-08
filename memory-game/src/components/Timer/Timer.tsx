@@ -47,6 +47,7 @@ const Timer = () => {
     console.log("render TIMER");
     // readTime(countTime);
     checkTimer();
+    // eslint-disable-next-line
   }, [toggleTimer]);
 
   return (

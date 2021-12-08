@@ -8,6 +8,7 @@ import rose from "../../img/card suite/tomas_arad_red_rose.svg";
 import { UserType } from "../../types/user";
 import { useActions } from "../../hooks/useActions";
 import { useNavigate } from "react-router";
+import styles from "./Form.module.css";
 
 const schema = yup
   .object({
