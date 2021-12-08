@@ -116,15 +116,15 @@ const Form = () => {
           <label htmlFor="cards_suite">Which suite?</label>
           <div className={styles.suites}>
             <div className={styles.suite}>
-              <img src={react} alt="" width="100" height="100" />
+              <img src={react} alt="react" className={styles.suiteImg} />
               <input type="radio" {...register("suite", { required: true })} value={react} />
             </div>
             <div className={styles.suite}>
-              <img src={js_prime} alt="" width="100" height="100" />
+              <img src={js_prime} alt="js" className={styles.suiteImg} />
               <input type="radio" {...register("suite", { required: true })} value={js_prime} />
             </div>
             <div className={styles.suite}>
-              <img src={rose} alt="" width="100" height="100" />
+              <img src={rose} alt="rose" className={styles.suiteImg} />
               <input type="radio" {...register("suite", { required: true })} value={rose} />
             </div>
           </div>

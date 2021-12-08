@@ -7,7 +7,7 @@ const Footer = () => {
     <footer>
       <div className={styles.footer}>
         <img className={styles.footerImg} src={copyRight} alt="copyright" />
-        <p className={styles.footerText}> created by Vlad</p>
+        <p className={styles.footerText}> created by Vlad Folse</p>
       </div>
     </footer>
   );

@@ -15,7 +15,7 @@ const NavBar = () => {
         </li>
         <li>
           <NavLink to="/home" end className={({ isActive }) => (isActive ? "true" : "false")}>
-            <p className={styles.nav}>Home</p>
+            <p className={styles.nav}>New player</p>
           </NavLink>
         </li>
         <li>

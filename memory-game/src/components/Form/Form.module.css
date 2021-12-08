@@ -123,3 +123,8 @@ option {
 .submitButton:hover {
   color: var(--darkColor);
 }
+
+.suiteImg {
+  width: 100px;
+  height: 100px;
+}

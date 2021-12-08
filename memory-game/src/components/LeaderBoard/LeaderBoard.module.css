@@ -1,0 +1,54 @@
+ul {
+  margin: 0;
+  padding: 0;
+}
+
+.leaderBoard {
+  padding-bottom: 41.75rem;
+}
+
+.leaderTable {
+  font-family: Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 90%;
+  margin-left: 4rem;
+}
+
+.leaderTable td,
+.leaderTable th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+.leaderTable tr:nth-child(even) {
+  background-color: var(--blueColor);
+}
+
+.leaderTable tr:hover {
+  background-color: var(--greyColor);
+}
+
+.leaderTable th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: #04aa6d;
+  color: white;
+}
+.leaderTable tr:last-child(even) {
+  margin-bottom: -3px;
+}
+
+.seconds {
+  color: var(--whiteColor);
+}
+.milisec {
+  color: var(--whiteColor);
+}
+.minutes {
+  color: var(--whiteColor);
+}
+
+.leaderBoardEmpty {
+  padding-bottom: 46.7rem;
+}

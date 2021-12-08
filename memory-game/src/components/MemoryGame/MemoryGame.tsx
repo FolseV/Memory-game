@@ -23,7 +23,8 @@ function shuffleCards(array: CardsType[]) {
 }
 
 const MemoryGame = () => {
-  console.log("render game");
+  const { theme } = useTypedSelector((state) => state.theme);
+
   const { cards, openCards, clearedCards, moves, shouldDisableAllCards } = useTypedSelector(
     (state) => state.cards
   );
@@ -177,7 +178,11 @@ const MemoryGame = () => {
         />
       ) : undefined}
 
-      <div className={styles.score}>
+      <div
+        className={cx({
+          score: theme,
+        })}
+      >
         <span className={styles.moves}>Score: {moves}</span>
       </div>
       <Timer />

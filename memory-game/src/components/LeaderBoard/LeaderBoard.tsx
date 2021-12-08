@@ -1,42 +1,18 @@
-import { useEffect } from "react";
-import { useNavigate } from "react-router";
 import { sortedLeaderBoardType } from "../../types/types";
-
-const removeNaNLeaderBoard = () => {
-  const leaderBoardStr = localStorage.getItem("LeaderBoard");
-  if (leaderBoardStr) {
-    const leaderBoard = JSON.parse(leaderBoardStr);
-    let filteredLeaderBoard: sortedLeaderBoardType[] = leaderBoard.filter(
-      (user: sortedLeaderBoardType) => {
-        return user.time !== undefined && user.time !== 0;
-      }
-    );
-    console.log(filteredLeaderBoard);
-    // if (filteredLeaderBoard.length !== 0) {
-    localStorage.setItem("LeaderBoard", JSON.stringify(filteredLeaderBoard));
-    // }
-  }
-};
+import styles from "./LeaderBoard.module.css";
 
 const LeaderBoard = () => {
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    removeNaNLeaderBoard();
-  }, []);
-
   const leaderBoardStr = localStorage.getItem("LeaderBoard");
   if (leaderBoardStr) {
-    console.log("render leaderboard");
     const leaderBoard = JSON.parse(leaderBoardStr);
     //filter if time not asigned
-    // let filteredLeaderBoard: sortedLeaderBoardType[] = leaderBoard.filter(
-    //   (user: sortedLeaderBoardType) => {
-    //     return user.time !== undefined;
-    //   }
-    // );
+    let filteredLeaderBoard: sortedLeaderBoardType[] = leaderBoard.filter(
+      (user: sortedLeaderBoardType) => {
+        return user.time !== undefined;
+      }
+    );
 
-    let sortedLeaderBoardByTime: sortedLeaderBoardType[] = leaderBoard.sort(
+    let sortedLeaderBoardByTime: sortedLeaderBoardType[] = filteredLeaderBoard.sort(
       (a: sortedLeaderBoardType, b: sortedLeaderBoardType) => (a.time > b.time ? 1 : -1)
     );
 
@@ -48,33 +24,45 @@ const LeaderBoard = () => {
     }
 
     return (
-      <div>
+      <div className={styles.leaderBoard}>
         <h1>Leaderboard TOP10</h1>
-        <button onClick={() => navigate(`/greetings`, { replace: true })}>Rules</button>
-        <ul>
-          {sortedLeaderBoardByTime.map((user: any) => {
+        <table className={styles.leaderTable}>
+          <tr>
+            <th>FirstName</th>
+            <th>Last Name</th>
+            <th>Email</th>
+            <th>Difficulty</th>
+            <th>Time</th>
+            <th>Score</th>
+          </tr>
+          {sortedLeaderBoardByTime.map((user) => {
             return (
-              <li key={user.time}>
-                <div>{user.firstName}</div>
-                <div>{user.lastName}</div>
-                <div>
-                  <span className="digits">
-                    Time: {("0" + Math.floor((user.time / 1000) % 60)).slice(-2)}.
+              <tr className={styles.leaderUser} key={user.time}>
+                <td className={styles.leaderFirstName}>{user.firstName}</td>
+                <td className={styles.leaderLastName}>{user.lastName}</td>
+                <td className={styles.leaderEmail}>{user.email}</td>
+                <td className={styles.leaderDifficulty}>{user.difficulty}</td>
+                <td className={styles.leaderTime}>
+                  <span className={styles.minutes}>
+                    {("0" + Math.floor((user.time / 60000) % 60)).slice(-2)}:
                   </span>
-                  <span className="digits mili-sec">
-                    {("0" + ((user.time / 10) % 100)).slice(-2)} !
+                  <span className={styles.seconds}>
+                    {("0" + Math.floor((user.time / 1000) % 60)).slice(-2)}.
                   </span>
-                </div>
-                <div>score: {user.moves}</div>
-              </li>
+                  <span className={styles.milisec}>
+                    {("0" + ((user.time / 10) % 100)).slice(-2)}
+                  </span>
+                </td>
+                <td className={styles.leaderScore}>{user.moves}</td>
+              </tr>
             );
           })}
-        </ul>
+        </table>
       </div>
     );
   }
   return (
-    <div className="div">
+    <div className={styles.leaderBoardEmpty}>
       <h1>Leaderboard TOP10 - empty!</h1>
     </div>
   );

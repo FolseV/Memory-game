@@ -1,0 +1,7 @@
+.timer {
+  color: var(--whiteColor);
+}
+
+.timerLight {
+  color: var(--darkColor);
+}
