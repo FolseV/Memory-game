@@ -6,13 +6,11 @@ import styles from "./Timer.module.css";
 const Timer = () => {
   const { toggleTimer, resetTimerToggle } = useTypedSelector((state) => state.timer);
   const { resetTimer, readTime } = useActions();
-  //   console.log("render timer");
   const [countTime, setCountTime] = useState<number>(0);
   const [intervalId, setIntervalId] = useState<number>(0);
 
   const handleStartTime = useCallback(() => {
     let interval: number = window.setInterval(() => {
-      //window.setInterval
       setCountTime((prev) => prev + 10);
     }, 10);
     setIntervalId(interval);
@@ -21,7 +19,6 @@ const Timer = () => {
   const handleStopTime = useCallback(() => {
     readTime(countTime);
     clearInterval(intervalId);
-    // console.log(typeof countTime);
   }, [intervalId, countTime, readTime]);
 
   const handleResetTime = useCallback(() => {
@@ -30,7 +27,6 @@ const Timer = () => {
   }, [intervalId]);
 
   const checkTimer = useCallback(() => {
-    // console.log("object");
     if (toggleTimer) {
       handleStartTime();
     } else {
@@ -38,14 +34,12 @@ const Timer = () => {
     }
     if (resetTimerToggle) {
       handleResetTime();
-      // гдето вызывается ресет и он срабатывает 4 раза
       resetTimer();
     }
   }, [handleResetTime, handleStartTime, handleStopTime, resetTimer, resetTimerToggle, toggleTimer]);
 
   useEffect(() => {
     console.log("render TIMER");
-    // readTime(countTime);
     checkTimer();
     // eslint-disable-next-line
   }, [toggleTimer]);
@@ -62,9 +56,6 @@ const Timer = () => {
         <span className={styles.digitsMiliSec} style={{ color: "white" }}>
           {("0" + ((countTime / 10) % 100)).slice(-2)}{" "}
         </span>
-        <button onClick={() => handleStartTime()}>start</button>
-        <button onClick={() => handleStopTime()}>stop</button>
-        <button onClick={() => handleResetTime()}>reset</button>
       </div>
     </div>
   );

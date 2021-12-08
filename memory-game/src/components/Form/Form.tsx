@@ -73,7 +73,7 @@ const Form = () => {
             id="firstName"
             placeholder="Your first name ..."
           />
-          <span style={{ color: "red" }}> {errors.firstName?.message}</span>
+          <span className={styles.error}> {errors.firstName?.message}</span>
         </div>
         <div className={styles.lastName}>
           <label htmlFor="surName">Last name</label>
@@ -82,7 +82,7 @@ const Form = () => {
             type="text"
             placeholder="Your last name..."
           />
-          <span style={{ color: "red" }}> {errors.lastName?.message}</span>
+          <span className={styles.error}> {errors.lastName?.message}</span>
         </div>
         <div className={styles.email}>
           <label htmlFor="email">Email</label>
@@ -91,7 +91,7 @@ const Form = () => {
             type="text"
             placeholder="Your email..."
           />
-          <span style={{ color: "red" }}> {errors.email?.message}</span>
+          <span className={styles.error}> {errors.email?.message}</span>
         </div>
         <div className={styles.select}>
           <label htmlFor="select">Choose difficulty </label>
@@ -99,17 +99,17 @@ const Form = () => {
             className={styles.selectDifficulty}
             {...register("difficulty", { required: true })}
             id="game_difficulty"
-            defaultValue="placeholder"
+            defaultValue=""
             onChange={handleSelect}
           >
-            <option disabled value="placeholder">
+            <option disabled value="">
               Choose difficulty
             </option>
-            <option value="easy">easy</option>
-            <option value="medium">medium</option>
-            <option value="hard">hard</option>
+            <option value="easy">Easy (14 cards)</option>
+            <option value="medium">Medium (20 cards)</option>
+            <option value="hard">Hard (32 cards)</option>
           </select>
-          <span style={{ color: "red" }}> {errors.difficulty?.message}</span>
+          <span className={styles.error}> {errors.difficulty?.message}</span>
         </div>
 
         <div className={styles.suitesSelect}>
@@ -128,7 +128,7 @@ const Form = () => {
               <input type="radio" {...register("suite", { required: true })} value={rose} />
             </div>
           </div>
-          <span style={{ color: "red" }}> {errors.suite?.message}</span>
+          <span className={styles.error}> {errors.suite?.message}</span>
         </div>
 
         <input type="submit" value="Submit" className={styles.submitButton} />
