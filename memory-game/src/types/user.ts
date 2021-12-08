@@ -12,7 +12,7 @@ export enum UserActionTypes {
 
 interface GetUserAction {
   type: UserActionTypes.GET_USER;
-  payload: any;
+  payload: UserType;
 }
 
 export interface UserState {

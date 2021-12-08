@@ -4,9 +4,9 @@ import Card from "../Card";
 import Modal from "../Modal";
 import useTypedSelector from "../../hooks";
 import { useActions } from "../../hooks/useActions";
-import classNames from "classnames/bind";
 import { CardsType } from "../../types/cards";
 import Timer from "../Timer";
+import classNames from "classnames/bind";
 
 let cx = classNames.bind(styles);
 

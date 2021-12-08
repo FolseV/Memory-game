@@ -5,6 +5,7 @@ const LeaderBoard = () => {
   const leaderBoardStr = localStorage.getItem("LeaderBoard");
   if (leaderBoardStr) {
     const leaderBoard = JSON.parse(leaderBoardStr);
+
     //filter if time not asigned
     let filteredLeaderBoard: sortedLeaderBoardType[] = leaderBoard.filter(
       (user: sortedLeaderBoardType) => {

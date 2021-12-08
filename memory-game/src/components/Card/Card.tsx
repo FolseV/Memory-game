@@ -5,7 +5,7 @@ import useTypedSelector from "../../hooks";
 import { CardsType } from "../../types/cards";
 
 interface Props {
-  onClick: any;
+  onClick: (arg: number) => void;
   card: CardsType;
   index: number;
   isInactive: boolean;
@@ -15,7 +15,6 @@ interface Props {
 
 const Card: React.FC<Props> = ({ onClick, card, index, isFlipped, isInactive, isDisabled }) => {
   const { user } = useTypedSelector((state) => state.user);
-  // console.log("render card");
   const handleClick = () => {
     !isFlipped && !isDisabled && onClick(index);
   };
