@@ -10,6 +10,7 @@ import { useActions } from "../../hooks/useActions";
 import { useNavigate } from "react-router";
 import styles from "./Form.module.css";
 
+// validation function
 const schema = yup
   .object({
     firstName: yup.string().required("First name is required!"),
@@ -21,7 +22,6 @@ const schema = yup
   .required();
 
 const Form = () => {
-  console.log("render form");
   const navigate = useNavigate();
   const { getUser, SetDifEasy, SetDifMedium, SetDifHard } = useActions();
   const {
@@ -61,53 +61,77 @@ const Form = () => {
     },
     [SetDifEasy, SetDifMedium, SetDifHard]
   );
+
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div>
+        <div className={styles.firstName}>
           <label htmlFor="firstName">First Name</label>
           <input
             {...register("firstName", { required: "This is required" })}
             type="text"
             id="firstName"
+            placeholder="Your first name ..."
           />
           <span style={{ color: "red" }}> {errors.firstName?.message}</span>
         </div>
-        <div>
+        <div className={styles.lastName}>
           <label htmlFor="surName">Last name</label>
-          <input {...register("lastName", { required: true })} type="text" />
+          <input
+            {...register("lastName", { required: true })}
+            type="text"
+            placeholder="Your last name..."
+          />
           <span style={{ color: "red" }}> {errors.lastName?.message}</span>
         </div>
-        <div>
+        <div className={styles.email}>
           <label htmlFor="email">Email</label>
-          <input {...register("email", { required: true })} type="text" />
+          <input
+            {...register("email", { required: true })}
+            type="text"
+            placeholder="Your email..."
+          />
           <span style={{ color: "red" }}> {errors.email?.message}</span>
         </div>
-        <select
-          {...register("difficulty", { required: true })}
-          id="game_difficulty"
-          defaultValue="easy"
-          onChange={handleSelect}
-        >
-          <option value="">...</option>
-          <option value="easy">easy</option>
-          <option value="medium">medium</option>
-          <option value="hard">hard</option>
-        </select>
-        <span style={{ color: "red" }}> {errors.difficulty?.message}</span>
-
-        <div>
-          <label htmlFor="cards_suite">Which suite?</label>
-          <img src={react} alt="" width="100" height="100" />
-          <input type="radio" {...register("suite", { required: true })} value={react} checked />
-          <img src={js_prime} alt="" width="100" height="100" />
-          <input type="radio" {...register("suite", { required: true })} value={js_prime} />
-          <img src={rose} alt="" width="100" height="100" />
-          <input type="radio" {...register("suite", { required: true })} value={rose} />
+        <div className={styles.select}>
+          <label htmlFor="select">Choose difficulty </label>
+          <select
+            className={styles.selectDifficulty}
+            {...register("difficulty", { required: true })}
+            id="game_difficulty"
+            defaultValue="placeholder"
+            onChange={handleSelect}
+          >
+            <option disabled value="placeholder">
+              Choose difficulty
+            </option>
+            <option value="easy">easy</option>
+            <option value="medium">medium</option>
+            <option value="hard">hard</option>
+          </select>
+          <span style={{ color: "red" }}> {errors.difficulty?.message}</span>
         </div>
-        <span style={{ color: "red" }}> {errors.suite?.message}</span>
 
-        <input type="submit" />
+        <div className={styles.suitesSelect}>
+          <label htmlFor="cards_suite">Which suite?</label>
+          <div className={styles.suites}>
+            <div className={styles.suite}>
+              <img src={react} alt="" width="100" height="100" />
+              <input type="radio" {...register("suite", { required: true })} value={react} />
+            </div>
+            <div className={styles.suite}>
+              <img src={js_prime} alt="" width="100" height="100" />
+              <input type="radio" {...register("suite", { required: true })} value={js_prime} />
+            </div>
+            <div className={styles.suite}>
+              <img src={rose} alt="" width="100" height="100" />
+              <input type="radio" {...register("suite", { required: true })} value={rose} />
+            </div>
+          </div>
+          <span style={{ color: "red" }}> {errors.suite?.message}</span>
+        </div>
+
+        <input type="submit" value="Submit" className={styles.submitButton} />
       </form>
     </>
   );
