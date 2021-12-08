@@ -1,6 +1,6 @@
 export interface CardsType {
   type: string;
-  image: any;
+  image: string;
 }
 
 export enum CardsActionTypes {
@@ -17,7 +17,6 @@ export enum CardsActionTypes {
 
 interface FlipCardAction {
   type: CardsActionTypes.FLIP_CARD;
-  payload: any;
 }
 
 interface SetOpenCardsAction {
@@ -27,7 +26,7 @@ interface SetOpenCardsAction {
 
 interface SetClearedCardsAction {
   type: CardsActionTypes.SET_CLEARED_CARDS;
-  payload: any;
+  payload: string | null;
 }
 
 interface SetMovesAction {

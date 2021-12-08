@@ -4,9 +4,9 @@ import Card from "../Card";
 import Modal from "../Modal";
 import useTypedSelector from "../../hooks";
 import { useActions } from "../../hooks/useActions";
-import classNames from "classnames/bind";
 import { CardsType } from "../../types/cards";
 import Timer from "../Timer";
+import classNames from "classnames/bind";
 
 let cx = classNames.bind(styles);
 
@@ -23,7 +23,8 @@ function shuffleCards(array: CardsType[]) {
 }
 
 const MemoryGame = () => {
-  console.log("render game");
+  const { theme } = useTypedSelector((state) => state.theme);
+
   const { cards, openCards, clearedCards, moves, shouldDisableAllCards } = useTypedSelector(
     (state) => state.cards
   );
@@ -47,91 +48,22 @@ const MemoryGame = () => {
 
   // const timeout: { current: NodeJS.Timeout | undefined } = useRef(undefined);
 
-  // const [time, setTime] = useState<number>(0);
-  // const [intervalId, setIntervalId] = useState<number>(0);
-
-  // const handleStartTime = () => {
-  //   let interval: number = window.setInterval(() => {
-  //     //window.setInterval
-  //     setTime((prev) => prev + 10);
-  //   }, 10);
-
-  //   setIntervalId(interval);
-  // };
-
-  // const handleStartTime = useCallback(() => {
-  //   let interval: number = window.setInterval(() => {
-  //     //window.setInterval
-  //     setTime((prev) => prev + 10);
-  //   }, 10);
-  //   console.log(interval);
-  //   setIntervalId(interval);
-  // }, [setTime]);
-
-  // const handleStopTime = () => {
-  //   clearInterval(intervalId);
-  // };
-  // const handleStopTime = useCallback(() => {
-  //   clearInterval(intervalId);
-  // }, [intervalId]);
-
-  // const handleResetTime = () => {
-  //   clearInterval(intervalId);
-  //   setTime(0);
-  // };
-
-  // const handleResetTime = useCallback(() => {
-  //   clearInterval(intervalId);
-  //   setTime(0);
-  // }, [intervalId]);
-
   const checkCompletion = useCallback(() => {
     if (Object.keys(clearedCards).length === cards.length) {
       setShowModal(true);
-      // handleStopTime();
       stopTimer();
 
       let leaderBoardStr = localStorage.getItem("LeaderBoard");
       if (leaderBoardStr) {
         let leaderBoard = JSON.parse(leaderBoardStr);
-        // if (time) {
         leaderBoard[leaderBoard.length - 1].time = time;
         leaderBoard[leaderBoard.length - 1].moves = moves;
         localStorage.setItem("LeaderBoard", JSON.stringify(leaderBoard));
-        // } else {
-        // leaderBoard.slice(0, leaderBoard.length - 1);
-
-        // localStorage.setItem("LeaderBoard", JSON.stringify(leaderBoard));
-        // }
       }
     }
   }, [cards.length, clearedCards, stopTimer, moves, time]);
 
-  // const checkCompletion = () => {
-  //   if (Object.keys(clearedCards).length === cards.length) {
-  //     setShowModal(true);
-  //     handleStopTime();
-  //     const highScore = Math.min(moves, bestScore);
-  //     setBestScore(highScore);
-  //     localStorage.setItem("bestScore", highScore + "");
-  //   }
-  // };
-
   let timer: ReturnType<typeof setTimeout>;
-  // const evaluate = () => {
-  //   const [first, second] = openCards;
-  //   if (playingCards[first].type === playingCards[second].type) {
-  //     setClearedCards(playingCards[first].type);
-  //     setShouldDisableAllCards();
-
-  //     setOpenCards(null);
-  //     return;
-  //   }
-  //   timer = setTimeout(() => {
-  //     setShouldDisableAllCards();
-  //     setOpenCards(null);
-  //   }, 500);
-  // };
 
   const evaluate = useCallback(
     (timer) => {
@@ -164,9 +96,7 @@ const MemoryGame = () => {
   };
 
   const handleRestart = () => {
-    // handleResetTime();
     resetTimer();
-    // handleStartTime();
     startTimer();
     setClearedCards(null);
     setOpenCards(null);
@@ -190,7 +120,6 @@ const MemoryGame = () => {
   }, [clearedCards, checkCompletion]);
 
   useEffect(() => {
-    // handleStartTime();
     startTimer();
   }, [startTimer]);
 
@@ -205,12 +134,9 @@ const MemoryGame = () => {
       }
     }
     return false;
-    // return Boolean(clearedCards[card.type]);
   };
 
   return (
-    // <div className="memory-game">
-    // <div className={styles.memoryGame}>
     <div
       className={cx(
         {
@@ -219,7 +145,6 @@ const MemoryGame = () => {
         { [`dif-${user.difficulty}`]: true }
       )}
     >
-      {/* <div className="memory-card"> */}
       <div
         className={cx(
           {
@@ -253,20 +178,14 @@ const MemoryGame = () => {
         />
       ) : undefined}
 
-      <div className={styles.score}>
+      <div
+        className={cx({
+          score: theme,
+        })}
+      >
         <span className={styles.moves}>Score: {moves}</span>
       </div>
       <Timer />
-      <button
-        className={styles.button}
-        onClick={() => {
-          setShowModal(true);
-          stopTimer();
-          // handleStopTime();
-        }}
-      >
-        TEST
-      </button>
       <button className={styles.button} onClick={handleRestart}>
         Restart
       </button>

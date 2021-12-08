@@ -1,22 +1,6 @@
 import { CardsState, CardsAction, CardsActionTypes } from "../../types/cards";
 import { easy, hard, medium } from "../../data/data";
 
-// const CheckLocalStorageValues = (): CardsState => {
-//   const checkLocalStorageStr = localStorage.getItem("LeaderBoard");
-//   const [state, setState] = useState("");
-//   if (checkLocalStorageStr) {
-//     const checkLocalStorage = JSON.parse(checkLocalStorageStr);
-//     var difficulty: string = checkLocalStorage[checkLocalStorage.length - 1].difficulty;
-//     setState(difficulty);
-//   }
-//   const difficultys: any = {
-//     easy: easy,
-//     medium: medium,
-//     hard: hard,
-//   };
-
-//   return initialState;
-// };
 const initialState: CardsState = {
   cards: easy,
   openCards: [],

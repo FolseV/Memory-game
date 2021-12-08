@@ -1,43 +1,29 @@
-import "./App.css";
+import styles from "./App.module.css";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import Form from "./components/Form";
 import MemoryGame from "./components/MemoryGame";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { NavLink } from "react-router-dom";
-import { Navigate } from "react-router-dom";
 import Greeting from "./components/Greeting";
 import LeaderBoard from "./components/LeaderBoard";
+import NavBar from "./components/NavBar";
+import Footer from "./components/Footer";
+import useTypedSelector from "./hooks";
+import classNames from "classnames/bind";
+
+let cx = classNames.bind(styles);
 
 function App() {
+  const { theme } = useTypedSelector((state) => state.theme);
+
   return (
     <BrowserRouter>
-      <div className="App">
-        <header>
-          <ul>
-            <li>
-              <NavLink to="/home" end className={({ isActive }) => (isActive ? "true" : "false")}>
-                Home
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
-                to="/greetings"
-                end
-                className={({ isActive }) => (isActive ? "true" : "false")}
-              >
-                Rules
-              </NavLink>
-            </li>
-            <li>
-              <NavLink
-                to="/leaderboard"
-                end
-                className={({ isActive }) => (isActive ? "true" : "false")}
-              >
-                Leaderboard
-              </NavLink>
-            </li>
-          </ul>
-        </header>
+      <div
+        className={cx({
+          app: true,
+          appDark: theme,
+        })}
+      >
+        <NavBar />
         <main>
           <Routes>
             <Route path="/greetings" element={<Greeting />} />
@@ -47,9 +33,7 @@ function App() {
             <Route path="*" element={<Navigate to="/greetings" />}></Route>
           </Routes>
         </main>
-        <footer>
-          <div style={{ margin: "500px" }}>created by Folse</div>
-        </footer>
+        <Footer />
       </div>
     </BrowserRouter>
   );

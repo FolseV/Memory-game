@@ -1,13 +1,19 @@
 import React from "react";
 import { useNavigate } from "react-router";
+import styles from "./Greeting.module.css";
+import classNames from "classnames/bind";
+import useTypedSelector from "../../hooks";
+
+let cx = classNames.bind(styles);
 
 const Greeting = () => {
-  console.log("render greeting");
+  const { theme } = useTypedSelector((state) => state.theme);
   const navigate = useNavigate();
+
   return (
-    <div>
-      <h1>Hi!</h1>
-      <div>
+    <div className={styles.greeting}>
+      <h1 className={styles.greetingH1}>Hi!</h1>
+      <div className={styles.greetingFirstParagraph}>
         <h2>Instructions to play memory</h2>
         <p>
           Test your memory with this memory game. First select the difficulty level. The higher the
@@ -19,7 +25,7 @@ const Greeting = () => {
           you find all the pairs in this memory, you have completed the level.
         </p>
       </div>
-      <div>
+      <div className={styles.greetingSecondParagraph}>
         <h2>Memory and children</h2>
         <p>
           Children should periodically return to this memory until they are easily capable of
@@ -30,10 +36,15 @@ const Greeting = () => {
           holidays!
         </p>
       </div>
-      <div>
-        <a href="https://en.wikipedia.org/wiki/Concentration_(card_game)">About</a>
-      </div>
-      <button onClick={() => navigate(`/home`, { replace: true })}>Next</button>
+      <button
+        className={cx({
+          greetingButton: true,
+          greetingButtonLight: theme,
+        })}
+        onClick={() => navigate(`/home`, { replace: true })}
+      >
+        Next
+      </button>
     </div>
   );
 };

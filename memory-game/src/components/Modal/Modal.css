@@ -22,18 +22,13 @@
   padding: 20px;
   border-radius: 5px;
   background-color: white;
-  /* height: 400px; */
   width: 30vw;
   transform: scale(0.5);
   transition: 0.4s all;
-  /* width: 1000px; */
-  /* height: 1000px; */
-  /* pointer-events: auto; */
 }
 
 .modal__content.active {
   transform: scale(1);
-  /* pointer-events: none; */
 }
 .modal__title {
   color: black;

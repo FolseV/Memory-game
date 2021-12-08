@@ -1,57 +1,14 @@
-.memoryGame {
-  /* position: absolute; */
-  /* width: 100%; */
-  /* height: 100%; */
-  background-color: #01579b;
-}
-/* .memoryGame header { */
-/* position: relative; */
-/* width: 100%; */
-/* text-align: center; */
-/* margin-bottom: 8px; */
-/* } */
-/* .memoryGame header > div { */
-/* font-size: 15px; */
-/* width: 324px; */
-/* text-align: center; */
-/* margin: 0 auto; */
-/* } */
-.memoryGame footer {
-  width: 360px;
-  position: relative;
-  margin: 0 auto;
-  padding: 10px 4px;
-  margin-top: 10px;
-}
-.memoryGame footer .score {
-  justify-content: center;
-  display: flex;
-}
-.memoryGame footer .score div {
-  padding: 8px;
-}
-.memoryGame footer .restart {
-  display: flex;
-  justify-content: center;
-}
 .memoryGame .memoryCard {
-  border: 1px solid black;
+  border: 1px solid var(--blueColor);
   padding: 12px;
-  /* box-shadow: 0 0 4px 4px #dedede; */
   display: grid;
-  /* grid-template-columns: repeat(4, 1fr); */
-  /* grid-template-rows: repeat(5, 1fr); */
   justify-items: center;
   align-items: stretch;
   gap: 1rem;
-  /* margin: 0 auto; */
-  margin: 0px 20px 0px;
-  /* width: 640px; */
-  /* width: auto; */
-  /* height: auto; */
-  height: 640px;
+  margin: 0.4rem 10rem 0px;
+  height: 39.6rem;
   perspective: 100%;
-  /* max-width: 720px; */
+  /* max-width: 70rem; */
 }
 .dif-easy {
   grid-template-columns: repeat(4, 1fr);
@@ -62,28 +19,26 @@
   grid-template-rows: repeat(5, 1fr);
 }
 .dif-hard {
-  /* width: 800px; */
-  /* height: 800px; */
   grid-template-columns: repeat(4, 1fr);
   grid-template-rows: repeat(8, 0.5fr);
 }
+
 .score {
-  margin-top: 5px;
-  margin-bottom: 10px;
   color: white;
 }
 
 .button {
   width: 100px;
-  height: 60px;
-  border-color: #8e44ad;
+  height: 45px;
+  border-color: var(--blueColor);
   border-radius: 0;
-  color: #8e44ad;
+  color: var(--blueColor);
   position: relative;
   overflow: hidden;
   z-index: 1;
   -webkit-transition: color 150ms ease-in-out;
   transition: color 150ms ease-in-out;
+  margin-bottom: 5rem;
 }
 .button:after {
   content: "";
@@ -95,7 +50,7 @@
   transform: translateX(-50%);
   width: 0;
   height: 100%;
-  background: #8e44ad;
+  background: var(--blueColor);
   z-index: -1;
   -webkit-transition: width 150ms ease-in-out;
   transition: width 150ms ease-in-out;
