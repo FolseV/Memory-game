@@ -8,6 +8,7 @@ let cx = classNames.bind(styles);
 
 const Timer = () => {
   const { theme } = useTypedSelector((state) => state.theme);
+
   const { toggleTimer, resetTimerToggle } = useTypedSelector((state) => state.timer);
   const { resetTimer, readTime } = useActions();
   const [countTime, setCountTime] = useState<number>(0);
