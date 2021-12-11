@@ -1,33 +1,56 @@
+import React, { useState } from "react";
 import { sortedLeaderBoardType } from "../../types/types";
 import styles from "./LeaderBoard.module.css";
 
 const LeaderBoard = () => {
   const leaderBoardStr = localStorage.getItem("LeaderBoard");
-  if (leaderBoardStr) {
-    const leaderBoard = JSON.parse(leaderBoardStr);
+  // if (leaderBoardStr) {
+  const leaderBoard = JSON.parse(leaderBoardStr ? leaderBoardStr : "");
 
-    //filter if time not asigned
-    let filteredLeaderBoard: sortedLeaderBoardType[] = leaderBoard.filter(
-      (user: sortedLeaderBoardType) => {
-        return user.time !== undefined;
-      }
-    );
-
-    let sortedLeaderBoardByTime: sortedLeaderBoardType[] = filteredLeaderBoard.sort(
-      (a: sortedLeaderBoardType, b: sortedLeaderBoardType) => (a.time > b.time ? 1 : -1)
-    );
-
-    //remove more than 10 values
-    if (sortedLeaderBoardByTime.length >= 10) {
-      var newSortedArray = sortedLeaderBoardByTime.slice(0, 10);
-      localStorage.setItem("LeaderBoard", JSON.stringify(newSortedArray));
-      sortedLeaderBoardByTime = newSortedArray;
+  //filter if time not asigned
+  let filteredLeaderBoard: sortedLeaderBoardType[] = leaderBoard.filter(
+    (user: sortedLeaderBoardType) => {
+      return user.time !== undefined;
     }
+  );
 
-    return (
-      <div className={styles.leaderBoard}>
-        <h1>Leaderboard TOP10</h1>
-        <table className={styles.leaderTable}>
+  // filter by difficulty
+
+  let filteredByEasy = filteredLeaderBoard.filter((user: sortedLeaderBoardType) => {
+    return user.difficulty === "easy";
+  });
+  let filteredByMedium = filteredLeaderBoard.filter((user: sortedLeaderBoardType) => {
+    return user.difficulty === "medium";
+  });
+  let filteredByHard = filteredLeaderBoard.filter((user: sortedLeaderBoardType) => {
+    return user.difficulty === "hard";
+  });
+
+  //works only here
+  const [filteredItems, setFilteredItems] = useState<sortedLeaderBoardType[]>(filteredByEasy);
+
+  let sortedLeaderBoardByTime: sortedLeaderBoardType[] = filteredItems.sort(
+    (a: sortedLeaderBoardType, b: sortedLeaderBoardType) => (a.time > b.time ? 1 : -1)
+  );
+
+  const top10 = sortedLeaderBoardByTime.slice(0, 10);
+  return (
+    <div className={styles.leaderBoard}>
+      <h1>Leaderboard TOP10</h1>
+      <button className={styles.leaderBoardButton} onClick={() => setFilteredItems(filteredByEasy)}>
+        Easy
+      </button>
+      <button
+        className={styles.leaderBoardButton}
+        onClick={() => setFilteredItems(filteredByMedium)}
+      >
+        Medium
+      </button>
+      <button className={styles.leaderBoardButton} onClick={() => setFilteredItems(filteredByHard)}>
+        Hard
+      </button>
+      <table className={styles.leaderTable}>
+        <tbody>
           <tr>
             <th>FirstName</th>
             <th>Last Name</th>
@@ -36,9 +59,9 @@ const LeaderBoard = () => {
             <th>Time</th>
             <th>Score</th>
           </tr>
-          {sortedLeaderBoardByTime.map((user) => {
+          {top10.map((user, index) => {
             return (
-              <tr className={styles.leaderUser} key={user.time}>
+              <tr className={styles.leaderUser} key={index}>
                 <td className={styles.leaderFirstName}>{user.firstName}</td>
                 <td className={styles.leaderLastName}>{user.lastName}</td>
                 <td className={styles.leaderEmail}>{user.email}</td>
@@ -58,15 +81,16 @@ const LeaderBoard = () => {
               </tr>
             );
           })}
-        </table>
-      </div>
-    );
-  }
-  return (
-    <div className={styles.leaderBoardEmpty}>
-      <h1>Leaderboard TOP10 - empty!</h1>
+        </tbody>
+      </table>
     </div>
   );
+  // }
+  // return (
+  //   <div className={styles.leaderBoardEmpty}>
+  //     <h1>Leaderboard TOP10 - empty!</h1>
+  //   </div>
+  // );
 };
 
 export default LeaderBoard;

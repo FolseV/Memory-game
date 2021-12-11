@@ -52,3 +52,38 @@ ul {
 .leaderBoardEmpty {
   padding-bottom: 46.7rem;
 }
+
+.leaderBoardButton {
+  width: 100px;
+  height: 45px;
+  border-color: var(--blueColor);
+  border-radius: 0;
+  color: var(--blueColor);
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+  -webkit-transition: color 150ms ease-in-out;
+  transition: color 150ms ease-in-out;
+  margin-bottom: 1rem;
+}
+.leaderBoardButton:after {
+  content: "";
+  position: absolute;
+  display: block;
+  top: 0;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+  transform: translateX(-50%);
+  width: 0;
+  height: 100%;
+  background: var(--blueColor);
+  z-index: -1;
+  -webkit-transition: width 150ms ease-in-out;
+  transition: width 150ms ease-in-out;
+}
+.leaderBoardButton:hover {
+  color: #fff;
+}
+.leaderBoardButton:hover:after {
+  width: 110%;
+}
