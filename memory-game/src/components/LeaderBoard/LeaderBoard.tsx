@@ -4,7 +4,6 @@ import styles from "./LeaderBoard.module.css";
 
 const LeaderBoard = () => {
   const leaderBoardStr = localStorage.getItem("LeaderBoard");
-  // if (leaderBoardStr) {
   const leaderBoard = JSON.parse(leaderBoardStr ? leaderBoardStr : "");
 
   //filter if time not asigned
@@ -85,12 +84,6 @@ const LeaderBoard = () => {
       </table>
     </div>
   );
-  // }
-  // return (
-  //   <div className={styles.leaderBoardEmpty}>
-  //     <h1>Leaderboard TOP10 - empty!</h1>
-  //   </div>
-  // );
 };
 
 export default LeaderBoard;

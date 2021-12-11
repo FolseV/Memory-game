@@ -1,8 +1,11 @@
 import React from "react";
-import classNames from "classnames";
-import "./Card.css";
+// import classNames from "classnames";
+import classNames from "classnames/bind";
+import styles from "./Card.module.css";
 import useTypedSelector from "../../hooks";
 import { CardsType } from "../../types/cards";
+
+let cx = classNames.bind(styles);
 
 interface Props {
   onClick: (arg: number) => void;
@@ -21,17 +24,27 @@ const Card: React.FC<Props> = ({ onClick, card, index, isFlipped, isInactive, is
 
   return (
     <div
-      className={classNames("card", {
-        "is-flipped": isFlipped,
-        "is-inactive": isInactive,
+      className={cx({
+        card: true,
+        isFlipped: isFlipped,
+        isInactive: isInactive,
       })}
       onClick={handleClick}
     >
-      <div className="card-face card-font-face">
-        <img src={user.suite} alt="react" />
+      <div
+        className={cx({
+          cardFace: true,
+        })}
+      >
+        <img src={user.suite} alt="frontFace" />
       </div>
-      <div className="card-face card-back-face">
-        <img src={card?.image} alt="suite" />
+      <div
+        className={cx({
+          cardFace: true,
+          cardBackFace: true,
+        })}
+      >
+        <img src={card?.image} alt="backFace" />
       </div>
     </div>
   );

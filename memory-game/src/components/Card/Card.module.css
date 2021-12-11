@@ -13,20 +13,20 @@
   width: 90%;
   height: 90%;
 }
-.card .card-face {
+.card .cardFace {
   backface-visibility: hidden;
   position: absolute;
   width: 100%;
   height: 100%;
   background-color: var(--blueColor);
 }
-.card .card-face.card-back-face {
+.card .cardFace.cardBackFace {
   transform: rotateY(180deg);
 }
-.is-flipped {
+.isFlipped {
   transform: rotateY(180deg);
 }
-.is-inactive {
+.isInactive {
   /* opacity: 0; */
   visibility: hidden;
 }

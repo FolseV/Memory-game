@@ -187,7 +187,7 @@ const MemoryGame = () => {
       </div>
       <Timer />
       <button className={styles.button} onClick={handleRestart}>
-        Restart
+        Give up (Restart)
       </button>
     </div>
   );
