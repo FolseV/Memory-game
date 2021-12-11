@@ -4,7 +4,7 @@ import styles from "./LeaderBoard.module.css";
 
 const LeaderBoard = () => {
   const leaderBoardStr = localStorage.getItem("LeaderBoard");
-  const leaderBoard = JSON.parse(leaderBoardStr ? leaderBoardStr : "");
+  const leaderBoard = JSON.parse(leaderBoardStr ? leaderBoardStr : "[]");
 
   //filter if time not asigned
   let filteredLeaderBoard: sortedLeaderBoardType[] = leaderBoard.filter(
