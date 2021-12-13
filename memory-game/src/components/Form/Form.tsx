@@ -5,7 +5,7 @@ import * as yup from "yup";
 import react from "../../img/cards/platforms/react.svg";
 import js_prime from "../../img/card suite/primary-javascript.svg";
 import rose from "../../img/card suite/tomas_arad_red_rose.svg";
-import { UserType } from "../../types/user";
+import { difficulty, UserType } from "../../types/user";
 import { useActions } from "../../hooks/useActions";
 import { useNavigate } from "react-router";
 import styles from "./Form.module.css";
@@ -31,7 +31,7 @@ const Form = () => {
   } = useForm<UserType>({ resolver: yupResolver(schema) });
 
   const onSubmit = useCallback(
-    (data) => {
+    (data: UserType) => {
       getUser(data);
       navigate(`/memorygame`, { replace: true });
 
@@ -49,13 +49,13 @@ const Form = () => {
 
   const handleSelect = useCallback(
     (e) => {
-      if (e.target.value === "easy") {
+      if (e.target.value === difficulty.easy) {
         SetDifEasy();
       }
-      if (e.target.value === "medium") {
+      if (e.target.value === difficulty.medium) {
         SetDifMedium();
       }
-      if (e.target.value === "hard") {
+      if (e.target.value === difficulty.hard) {
         SetDifHard();
       }
     },
@@ -105,9 +105,9 @@ const Form = () => {
             <option disabled value="">
               Choose difficulty
             </option>
-            <option value="easy">Easy (14 cards)</option>
-            <option value="medium">Medium (20 cards)</option>
-            <option value="hard">Hard (32 cards)</option>
+            <option value={difficulty.easy}>Easy (14 cards)</option>
+            <option value={difficulty.medium}>Medium (20 cards)</option>
+            <option value={difficulty.hard}>Hard (32 cards)</option>
           </select>
           <span className={styles.error}> {errors.difficulty?.message}</span>
         </div>

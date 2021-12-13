@@ -95,7 +95,7 @@ const MemoryGame = () => {
     }
   };
 
-  const handleRestart = () => {
+  const handleRestart = useCallback(() => {
     resetTimer();
     startTimer();
     setClearedCards(null);
@@ -103,7 +103,7 @@ const MemoryGame = () => {
     setShowModal(false);
     resetMoves();
     setPlayingCards(shuffleCards(cards.concat(cards)));
-  };
+  }, [cards, resetMoves, resetTimer, setClearedCards, setOpenCards, startTimer]);
 
   useEffect(() => {
     let timeout: ReturnType<typeof setTimeout>;

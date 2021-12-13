@@ -1,9 +1,15 @@
+export enum difficulty {
+  "easy",
+  "medium",
+  "hard",
+}
+
 export interface UserType {
   firstName: string;
   lastName: string;
   email: string;
   suite: string;
-  difficulty: string;
+  difficulty: difficulty;
 }
 
 export enum UserActionTypes {

@@ -4,7 +4,8 @@ ul {
 }
 
 .leaderBoard {
-  padding-bottom: 41.75rem;
+  /* padding-bottom: 41.75rem; */
+  height: 89.5vh;
 }
 
 .leaderTable {

@@ -45,6 +45,9 @@ const Timer = () => {
 
   useEffect(() => {
     checkTimer();
+    return function cleanup() {
+      handleResetTime();
+    };
     // eslint-disable-next-line
   }, [toggleTimer]);
 
