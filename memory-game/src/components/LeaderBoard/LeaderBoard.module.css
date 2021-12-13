@@ -39,7 +39,7 @@ ul {
   margin-bottom: -3px;
 }
 
-.seconds {
+/* .seconds {
   color: var(--whiteColor);
 }
 .milisec {
@@ -47,7 +47,7 @@ ul {
 }
 .minutes {
   color: var(--whiteColor);
-}
+} */
 
 .leaderBoardEmpty {
   padding-bottom: 46.7rem;
