@@ -1,0 +1,63 @@
+.memoryGame .memoryCard {
+  border: 1px solid var(--blueColor);
+  padding: 12px;
+  display: grid;
+  justify-items: center;
+  align-items: stretch;
+  gap: 1rem;
+  margin: 0.4rem 10rem 0px;
+  height: 39.6rem;
+  perspective: 100%;
+  /* max-width: 70rem; */
+}
+.dif-easy {
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+}
+.dif-medium {
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(5, 1fr);
+}
+.dif-hard {
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(8, 0.5fr);
+}
+
+.score {
+  color: white;
+}
+
+.button {
+  width: 100px;
+  height: 45px;
+  border-color: var(--blueColor);
+  border-radius: 0;
+  color: var(--blueColor);
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+  -webkit-transition: color 150ms ease-in-out;
+  transition: color 150ms ease-in-out;
+  margin-bottom: 5rem;
+}
+.button:after {
+  content: "";
+  position: absolute;
+  display: block;
+  top: 0;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+  transform: translateX(-50%);
+  width: 0;
+  height: 100%;
+  background: var(--blueColor);
+  z-index: -1;
+  -webkit-transition: width 150ms ease-in-out;
+  transition: width 150ms ease-in-out;
+}
+.button:hover {
+  color: #fff;
+}
+.button:hover:after {
+  width: 110%;
+}
